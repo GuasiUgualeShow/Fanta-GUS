@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FANTA GUS</title>
+  
+  <!-- SDK Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --bg-main: #0f172a;
@@ -21,15 +26,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg-main); color: var(--text); padding-bottom: 70px; }
 
-    /* Header */
     header { background: linear-gradient(135deg, #4c1d95, #8b5cf6); padding: 16px; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-    /* Container e Pagine */
     .container { max-width: 500px; margin: 0 auto; padding: 16px; }
     .page { display: none; }
     .page.active { display: block; }
 
-    /* Card & Forms */
     .card { background: var(--bg-card); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
     .form-group { margin-bottom: 12px; }
     label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); }
@@ -41,27 +43,20 @@
     .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
     .btn-danger-icon { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: var(--danger); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; }
 
-    /* Alert Banner */
     .alert-banner { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4; }
-
-    /* Footer disclaimer per la registrazione */
     .disclaimer-text { text-align: center; color: var(--text-muted); font-size: 0.78rem; margin-top: 16px; font-style: italic; line-height: 1.3; }
 
-    /* Grid & Card Artisti */
     .artist-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     .artist-card { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; }
     .artist-info { display: flex; align-items: center; gap: 12px; }
     
-    /* Immagini e Avatar */
     .avatar { width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: bold; object-fit: cover; border: 2px solid var(--border); }
     .team-header-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; display: block; border: 3px solid var(--accent); }
     .badge-cost { background: #334155; color: var(--gold); padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
 
-    /* Captain Picker */
     .captain-picker-item { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); cursor: pointer; }
     .captain-picker-item.selected { border-color: var(--gold); background: rgba(245, 158, 11, 0.1); }
 
-    /* Leaderboard Table */
     .leaderboard-list { list-style: none; }
     .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-card); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
     .leaderboard-item.my-team { border-color: var(--gold); background: rgba(245, 158, 11, 0.05); }
@@ -70,16 +65,13 @@
     .rank-2 { background: #94a3b8; color: black; }
     .rank-3 { background: #b45309; color: white; }
 
-    /* Tab bar in basso */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0; }
     .nav-item { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .nav-item.active { color: var(--accent); font-weight: bold; }
 
-    /* Score banner */
     .budget-bar { background: var(--bg-card); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; margin-bottom: 16px; border: 1px solid var(--border); }
     .captain-badge { background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-left: 6px; }
 
-    /* Admin Box Artista */
     .admin-artist-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
     .admin-artist-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 8px; }
     .admin-log-entry { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 10px; border-radius: 6px; margin-bottom: 6px; font-size: 0.82rem; }
@@ -116,16 +108,14 @@
         
         <button class="btn" onclick="registerUser()">Registra e Inizia</button>
 
-        <!-- NOTA A FINE PAGINA REGISTRAZIONE -->
         <p class="disclaimer-text">
           🤖 App sviluppata con AI, non a scopo di lucro ma a fine ludico e amatoriale.
         </p>
       </div>
     </div>
 
-    <!-- SCHERMATA SQUADRA / SQUAD BUILDER -->
+    <!-- SCHERMATA SQUADRA -->
     <div id="page-squad" class="page">
-      
       <div class="alert-banner">
         ⚠️ <strong>Attenzione:</strong> Devi selezionare esattamente <strong>5 artisti</strong> e non puoi superare il budget massimo di <strong>100 Gastoni</strong> per completare la tua squadra!
       </div>
@@ -138,7 +128,6 @@
       <h3 style="margin-bottom: 10px;">1. Scegli i tuoi 5 Artisti</h3>
       <div class="artist-grid" id="artist-list"></div>
 
-      <!-- SELEZIONE CAPITANO -->
       <div id="captain-selection-box" style="display: none; margin-top: 24px;">
         <h3 style="margin-bottom: 10px; color: var(--gold);">2. Scegli il tuo Capitano 👑</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">I punti ottenuti dal Capitano verranno RADDOPPIATI (x2)!</p>
@@ -149,7 +138,7 @@
       <button class="btn" onclick="saveSquad()">Conferma e Salva Squadra</button>
     </div>
 
-    <!-- SCHERMATA HOME / DASHBOARD -->
+    <!-- SCHERMATA HOME -->
     <div id="page-home" class="page">
       <div class="card" style="text-align: center; border-color: var(--accent);">
         <img id="dash-team-logo" class="team-header-logo" src="" style="display:none;" alt="Logo Squadra">
@@ -187,8 +176,8 @@
         <div class="form-group">
           <label>Bonus / Malus</label>
           <select id="admin-points-select">
-           <option value="10">👏 Standing ovation del pubblico, anche parziale (+10)</option>
-            <option value="👕">👔 Outfit stravagante (+5)</option>
+            <option value="10">👏 Standing ovation del pubblico, anche parziale (+10)</option>
+            <option value="5">👔 Outfit stravagante (+5)</option>
             <option value="5">✋ Batte il cinque col presentatore (+5)</option>
             <option value="5">🥉 Entra nel podio (+5)</option>
             <option value="5">🏆 Vince la serata (+5)</option>
@@ -203,21 +192,18 @@
         <button class="btn" onclick="applyAdminPoints()">Assegna Punti</button>
       </div>
 
-      <!-- BOX RESET NELLA SCHERMATA ADMIN -->
       <div class="card" style="border-color: var(--danger);">
         <h3 style="color: var(--danger);">⚠️ Area Reset Prove</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Cancella tutte le prove e azzera i punti prima di iniziare lo spettacolo.</p>
         <button class="btn" style="background-color: var(--danger);" onclick="resetAllData()">Resetta Tutto (Inizio Spettacolo)</button>
       </div>
 
-<!-- 14 BOX DI RIEPILOGO ALFABETICO ARTISTI -->
       <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti (Ordine Alfabetico)</h3>
       <div id="admin-artist-boxes"></div>
     </div>
 
   </div>
 
-  <!-- NAVIGAZIONE IN BASSO -->
   <div class="bottom-nav" id="main-nav" style="display: none;">
     <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
     <div class="nav-item" onclick="showPage('squad', this)">🎸 Squadra</div>
@@ -226,6 +212,23 @@
   </div>
 
   <script>
+    // =========================================================
+    // ⚙️ INCOLLA QUI I DATI DELLA TUA CONFIGURAZIONE FIREBASE
+    // =========================================================
+    const firebaseConfig = {
+    apiKey: "AIzaSyCc0LcezQmzJ_oYJ0YE1CetcEFqH6DkB2k",
+    authDomain: "fanta-gus.firebaseapp.com",
+    databaseURL: "https://fanta-gus-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "fanta-gus",
+    storageBucket: "fanta-gus.firebasestorage.app",
+    messagingSenderId: "853111882016",
+    appId: "1:853111882016:web:101525c0579bf263401745"
+    };
+
+    // Inizializzazione Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     const ARTISTS = [
       { id: 1, name: "Lorenzo Giuliani", cost: 25, points: 0, image: "https://drive.google.com/thumbnail?id=1KG97E1D3qCnLsUc4hnOdrcMD6UXfCr8D&sz=w1000" },
       { id: 2, name: "Pietro Viconi", cost: 23, points: 0, image: "https://drive.google.com/thumbnail?id=1GnEA0PtvwDGXav9a4mKIczWFWojxzI-d&sz=w1000" },
@@ -243,15 +246,26 @@
       { id: 14, name: "Stefano Battistini", cost: 10, points: 0, image: "https://drive.google.com/thumbnail?id=1JPiljl0UsrUhw-67a5f7q6VJ7Q-Krzps&sz=w1000" }
     ];
 
-    let mockTeams = [
-      { teamName: "I Fanta-Campioni", points: 85 },
-      { teamName: "Gus Power FC", points: 62 },
-      { teamName: "Musica & Magia", points: 45 },
-      { teamName: "Gli Insuperabili", points: 30 }
-    ];
-
     let pointLogs = [];
     let userState = { username: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+
+    // --- ASCOLTATORI FIREBASE REALTIME ---
+    db.ref('artists').on('value', snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        ARTISTS.forEach(art => {
+          if (data[art.id] !== undefined) art.points = data[art.id].points || 0;
+        });
+        updateDashboard();
+        renderAdminBoxes();
+      }
+    });
+
+    db.ref('pointLogs').on('value', snapshot => {
+      const data = snapshot.val();
+      pointLogs = data ? Object.values(data) : [];
+      renderAdminBoxes();
+    });
 
     function registerUser() {
       const u = document.getElementById('reg-username').value;
@@ -371,12 +385,16 @@
     }
 
     function saveSquad() {
-      if (userState.selectedIds.length !== 5) {
-        return alert("Devi selezionare esattamente 5 artisti per completare la tua squadra!");
-      }
-      if (!userState.captainId) {
-        return alert("Devi scegliere un Capitano tra i tuoi 5 artisti!");
-      }
+      if (userState.selectedIds.length !== 5) return alert("Devi selezionare esattamente 5 artisti!");
+      if (!userState.captainId) return alert("Devi scegliere un Capitano!");
+
+      const userRef = db.ref('teams').push();
+      userRef.set({
+        teamName: userState.teamName,
+        username: userState.username,
+        selectedIds: userState.selectedIds,
+        captainId: userState.captainId
+      });
 
       populateAdminSelect();
       updateDashboard();
@@ -443,38 +461,50 @@
 
     function renderLeaderboard() {
       const container = document.getElementById('leaderboard-container');
-      container.innerHTML = "";
 
-      let allTeams = [...mockTeams];
-      if (userState.teamName) {
-        allTeams.push({
-          teamName: userState.teamName,
-          points: calculateMyPoints(),
-          isMe: true
-        });
-      }
+      db.ref('teams').on('value', snapshot => {
+        container.innerHTML = "";
+        const teamsData = snapshot.val();
+        let leaderboard = [];
 
-      allTeams.sort((a, b) => b.points - a.points);
+        if (teamsData) {
+          Object.values(teamsData).forEach(t => {
+            let pts = 0;
+            if (t.selectedIds) {
+              t.selectedIds.forEach(artId => {
+                const art = ARTISTS.find(a => a.id === artId);
+                if (art) {
+                  pts += (artId === t.captainId) ? art.points * 2 : art.points;
+                }
+              });
+            }
+            leaderboard.push({
+              teamName: t.teamName,
+              points: pts,
+              isMe: t.teamName === userState.teamName
+            });
+          });
+        }
 
-      allTeams.forEach((t, index) => {
-        const rank = index + 1;
-        let rankClass = "";
-        if (rank === 1) rankClass = "rank-1";
-        else if (rank === 2) rankClass = "rank-2";
-        else if (rank === 3) rankClass = "rank-3";
+        leaderboard.sort((a, b) => b.points - a.points);
 
-        const div = document.createElement('div');
-        div.className = `leaderboard-item ${t.isMe ? 'my-team' : ''}`;
-        div.innerHTML = `
-          <div style="display:flex; align-items:center;">
-            <div class="rank-badge ${rankClass}">${rank}</div>
-            <div>
-              <strong>${t.teamName}</strong> ${t.isMe ? ' <span style="font-size:0.75rem; color:var(--gold);">(Tua Squadra)</span>' : ''}
+        leaderboard.forEach((t, index) => {
+          const rank = index + 1;
+          let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
+
+          const div = document.createElement('div');
+          div.className = `leaderboard-item ${t.isMe ? 'my-team' : ''}`;
+          div.innerHTML = `
+            <div style="display:flex; align-items:center;">
+              <div class="rank-badge ${rankClass}">${rank}</div>
+              <div>
+                <strong>${t.teamName}</strong> ${t.isMe ? ' <span style="font-size:0.75rem; color:var(--gold);">(Tua Squadra)</span>' : ''}
+              </div>
             </div>
-          </div>
-          <strong style="color:var(--gold); font-size:1.1rem;">${t.points} pt</strong>
-        `;
-        container.appendChild(div);
+            <strong style="color:var(--gold); font-size:1.1rem;">${t.points} pt</strong>
+          `;
+          container.appendChild(div);
+        });
       });
     }
 
@@ -496,30 +526,37 @@
       const label = selectEl.options[selectEl.selectedIndex].text;
       
       const art = ARTISTS.find(a => a.id === artId);
-      art.points += pts;
+      const newPoints = art.points + pts;
 
-      pointLogs.push({
-        id: Date.now(),
+      db.ref('artists/' + artId).set({ points: newPoints });
+
+      const logId = Date.now();
+      db.ref('pointLogs/' + logId).set({
+        id: logId,
         artistId: artId,
         artistName: art.name,
         points: pts,
         label: label
       });
-
-      updateDashboard();
-      renderAdminBoxes();
     }
 
     function removeAdminPoint(logId) {
-      const idx = pointLogs.findIndex(l => l.id === logId);
-      if (idx > -1) {
-        const log = pointLogs[idx];
+      const log = pointLogs.find(l => l.id === logId);
+      if (log) {
         const art = ARTISTS.find(a => a.id === log.artistId);
-        art.points -= log.points;
-        pointLogs.splice(idx, 1);
-        
-        updateDashboard();
-        renderAdminBoxes();
+        const newPoints = art.points - log.points;
+
+        db.ref('artists/' + log.artistId).set({ points: newPoints });
+        db.ref('pointLogs/' + logId).remove();
+      }
+    }
+
+    function resetAllData() {
+      if (confirm("Sei sicuro di voler azzerare tutti i dati su Firebase per l'inizio dello spettacolo?")) {
+        db.ref('artists').remove();
+        db.ref('pointLogs').remove();
+        db.ref('teams').remove();
+        alert("Firebase azzerato con successo! Pronto per la diretta.");
       }
     }
 
