@@ -26,7 +26,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg-main); color: var(--text); padding-bottom: 70px; }
 
-    header { background: linear-gradient(135deg, #4c1d95, #8b5cf6); padding: 16px; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    header { background: linear-gradient(135deg, #4c1d95, #8b5cf6); padding: 16px; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); user-select: none; }
 
     .container { max-width: 500px; margin: 0 auto; padding: 16px; }
     .page { display: none; }
@@ -79,7 +79,8 @@
 </head>
 <body>
 
-  <header>🎤 FANTA GUS</header>
+  <!-- 💡 MODIFICA 1: TITOLO CLICCABILE PER INSERIRE IL PIN -->
+  <header onclick="unlockAdmin()" style="cursor: pointer;">🎤 FANTA GUS</header>
 
   <div class="container">
 
@@ -208,7 +209,9 @@
     <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
     <div class="nav-item" onclick="showPage('squad', this)">🎸 Squadra</div>
     <div class="nav-item" onclick="showPage('leaderboard', this)">🏆 Classifica</div>
-    <div class="nav-item" onclick="showPage('admin', this)">⚡ Admin</div>
+    
+    <!-- 💡 MODIFICA 2: VOCE ADMIN NASCOSTA DI DEFAULT PER GLI UTENTI -->
+    <div class="nav-item" id="admin-nav-item" style="display: none;" onclick="showPage('admin', this)">⚡ Admin</div>
   </div>
 
   <script>
@@ -216,13 +219,13 @@
     // ⚙️ INCOLLA QUI I DATI DELLA TUA CONFIGURAZIONE FIREBASE
     // =========================================================
     const firebaseConfig = {
-    apiKey: "AIzaSyCc0LcezQmzJ_oYJ0YE1CetcEFqH6DkB2k",
-    authDomain: "fanta-gus.firebaseapp.com",
-    databaseURL: "https://fanta-gus-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "fanta-gus",
-    storageBucket: "fanta-gus.firebasestorage.app",
-    messagingSenderId: "853111882016",
-    appId: "1:853111882016:web:101525c0579bf263401745"
+      apiKey: "INSERISCI_TUA_API_KEY",
+      authDomain: "INSERISCI_TUO_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://INSERISCI_TUO_PROJECT_ID-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "INSERISCI_TUO_PROJECT_ID",
+      storageBucket: "INSERISCI_TUO_PROJECT_ID.appspot.com",
+      messagingSenderId: "INSERISCI_SENDER_ID",
+      appId: "INSERISCI_APP_ID"
     };
 
     // Inizializzazione Firebase
@@ -248,6 +251,20 @@
 
     let pointLogs = [];
     let userState = { username: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+
+    // 💡 MODIFICA 3: FUNZIONE PER VERIFICARE IL PIN ADMIN
+    function unlockAdmin() {
+      const pin = prompt("Inserisci il PIN per accedere alla sezione Admin:");
+      if (pin === "1234") { // Può sostituire 1234 con la sua password personale
+        const adminBtn = document.getElementById('admin-nav-item');
+        adminBtn.style.display = 'flex';
+        alert("Modalità Admin sbloccata con successo!");
+        populateAdminSelect();
+        showPage('admin', adminBtn);
+      } else if (pin !== null) {
+        alert("PIN errato!");
+      }
+    }
 
     // --- ASCOLTATORI FIREBASE REALTIME ---
     db.ref('artists').on('value', snapshot => {
