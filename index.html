@@ -283,4 +283,256 @@
       </div>
 
       <div class="card" style="border-color: var(--danger);">
-        <h
+        <h3 style="color: var(--danger);">⚠️ Area Reset Fine Manifestazione</h3>
+        <button class="btn" style="background-color: var(--danger);" onclick="resetAllData()">Resetta e Cancella Tutti i Dati</button>
+      </div>
+
+      <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti</h3>
+      <div id="admin-artist-boxes"></div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav" id="main-nav" style="display: none;">
+    <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
+    <div class="nav-item" id="nav-squad-item" onclick="showPage('squad', this)" style="display: none;">🎸 Squadra</div>
+    <div class="nav-item" onclick="showPage('leaderboard', this)">🏆 Classifica</div>
+    <div class="nav-item" id="admin-nav-item" style="display: none;" onclick="showPage('admin', this)">⚡ Admin</div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBS0Z6OWEpPVjYq0JDjszqRyjjVe6V_6a8",
+      authDomain: "fanta-gus-new.firebaseapp.com",
+      databaseURL: "https://fanta-gus-new-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fanta-gus-new",
+      storageBucket: "fanta-gus-new.firebasestorage.app",
+      messagingSenderId: "1097810685766",
+      appId: "1:1097810685766:web:6aab0144cfff328e437f47"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const ARTISTS = [
+      { id: 1, name: "Lorenzo Giuliani", cost: 25, points: 0, image: "https://drive.google.com/thumbnail?id=1KG97E1D3qCnLsUc4hnOdrcMD6UXfCr8D&sz=w1000" },
+      { id: 2, name: "Pietro Viconi", cost: 23, points: 0, image: "https://drive.google.com/thumbnail?id=1GnEA0PtvwDGXav9a4mKIczWFWojxzI-d&sz=w1000" },
+      { id: 3, name: "Marco De Francesco", cost: 22, points: 0, image: "https://drive.google.com/thumbnail?id=1dlGm2eANuzzpYvpk3GW4rDEaChEAlTp0&sz=w1000" },
+      { id: 4, name: "Gianluca Greganti", cost: 20, points: 0, image: "https://drive.google.com/thumbnail?id=1XeshL6wGGfjyzDDlcYpDR0L8SZNZ-gn8&sz=w1000" },
+      { id: 5, name: "Alessia Bosi", cost: 19, points: 0, image: "https://drive.google.com/thumbnail?id=1BJ4cwHxabmpoRU9VMAuFUlu2Ev4PZInt&sz=w1000" },
+      { id: 6, name: "Alice Ceccarelli", cost: 18, points: 0, image: "https://drive.google.com/thumbnail?id=1RKu5VPAaiYcdKVxQF2dB5VPVQrjSsjl5&sz=w1000" },
+      { id: 7, name: "Francesco Bontempo", cost: 17, points: 0, image: "https://drive.google.com/thumbnail?id=18PTf28nWqkvPLJgdcHNgKSxhMx2Ki1kv&sz=w1000" },
+      { id: 8, name: "Le GEC", cost: 16, points: 0, image: "https://drive.google.com/thumbnail?id=1GVsqg__GzGk9eQ2Tg0WVeVssmISvpdKf&sz=w1000" },
+      { id: 9, name: "Gli MMMC", cost: 15, points: 0, image: "https://drive.google.com/thumbnail?id=14N3bRXaq8HGFTQf5CBaEMyBDrv1hhB21&sz=w1000" },
+      { id: 10, name: "Marco Ulissi", cost: 14, points: 0, image: "https://drive.google.com/thumbnail?id=1Ewq10gH-t8JY4yXerQQgf2KA-_lw852R&sz=w1000" },
+      { id: 11, name: "Francesco Giorgini", cost: 13, points: 0, image: "https://drive.google.com/thumbnail?id=1tjawAAhqKvAkjFhtksN15OPDS7ipSA_R&sz=w1000" },
+      { id: 12, name: "Maurizio Ceccarelli", cost: 12, points: 0, image: "https://drive.google.com/thumbnail?id=1Er8x_Z65q60oZJ-Vtkr7gzN9HZS2zaE1&sz=w1000" },
+      { id: 13, name: "D&G Damiano e Gabriele", cost: 11, points: 0, image: "https://drive.google.com/thumbnail?id=1MLEampL209ayC9irp6NidFzBJutUSupu&sz=w1000" },
+      { id: 14, name: "Stefano Battistini", cost: 10, points: 0, image: "https://drive.google.com/thumbnail?id=1JPiljl0UsrUhw-67a5f7q6VJ7Q-Krzps&sz=w1000" }
+    ];
+
+    let pointLogs = [];
+    let userState = { id: null, username: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+    let allTeamsCache = {};
+
+    function unlockAdmin() {
+      const pin = prompt("Inserisci il PIN Admin:");
+      if (pin === "1234") {
+        const adminBtn = document.getElementById('admin-nav-item');
+        adminBtn.style.display = 'flex';
+        alert("Modalità Admin Sbloccata!");
+        populateAdminSelect();
+        loadAdminUsersList();
+        showPage('admin', adminBtn);
+      } else if (pin !== null) {
+        alert("PIN errato!");
+      }
+    }
+
+    function toggleAuthMode(mode) {
+      if (mode === 'login') {
+        document.getElementById('box-register').style.display = 'none';
+        document.getElementById('box-login').style.display = 'block';
+      } else {
+        document.getElementById('box-login').style.display = 'none';
+        document.getElementById('box-register').style.display = 'block';
+      }
+    }
+
+    // REGISTRAZIONE ISTANTANEA (Senza blocchi di rete asincroni)
+    function checkAndRegister() {
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const t = document.getElementById('reg-team').value.trim();
+
+      if (!u || !p || !t) {
+        alert("Compila tutti i campi obbligatori!");
+        return;
+      }
+
+      userState.username = u;
+      userState.password = p;
+      userState.teamName = t;
+      userState.selectedIds = [];
+      userState.captainId = null;
+
+      const fileInput = document.getElementById('reg-logo');
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = evt => { 
+          userState.teamLogoUrl = evt.target.result; 
+          proceedToMarket(); 
+        };
+        reader.onerror = () => { 
+          userState.teamLogoUrl = null;
+          proceedToMarket(); 
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        userState.teamLogoUrl = null;
+        proceedToMarket();
+      }
+    }
+
+    function proceedToMarket() {
+      document.getElementById('page-auth').style.display = 'none';
+      document.getElementById('main-nav').style.display = 'flex';
+      document.getElementById('nav-squad-item').style.display = 'flex';
+      renderArtistMarket();
+      showPage('squad');
+    }
+
+    function loginUser() {
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value.trim();
+
+      if (!u || !p) return alert("Inserisci Username e Password!");
+
+      db.ref('teams').once('value').then(snapshot => {
+        const data = snapshot.val();
+        let foundUser = null, foundId = null;
+
+        if (data) {
+          Object.keys(data).forEach(key => {
+            if (data[key].username && data[key].username.toLowerCase() === u.toLowerCase()) {
+              foundUser = data[key];
+              foundId = key;
+            }
+          });
+        }
+
+        if (foundUser) {
+          if (foundUser.password === p) {
+            userState = { id: foundId, ...foundUser };
+            if (!userState.selectedIds) userState.selectedIds = [];
+            
+            document.getElementById('page-auth').style.display = 'none';
+            document.getElementById('main-nav').style.display = 'flex';
+            
+            if (userState.selectedIds.length === 5 && userState.captainId) {
+              document.getElementById('nav-squad-item').style.display = 'none';
+              updateDashboard();
+              showPage('home');
+            } else {
+              document.getElementById('nav-squad-item').style.display = 'flex';
+              renderArtistMarket();
+              showPage('squad');
+            }
+          } else {
+            alert("Password errata!");
+          }
+        } else {
+          alert("Nessuna squadra trovata con questa Username.");
+        }
+      }).catch(err => {
+        alert("Errore di connessione. Riprova.");
+      });
+    }
+
+    function renderArtistMarket() {
+      const container = document.getElementById('artist-list');
+      container.innerHTML = "";
+      
+      ARTISTS.forEach(art => {
+        const isSelected = userState.selectedIds.includes(art.id);
+        const card = document.createElement('div');
+        card.className = "artist-card";
+        
+        const avatarHtml = (art.image && art.image.trim() !== "")
+          ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
+          : `<div class="avatar">${art.name.charAt(0)}</div>`;
+
+        card.innerHTML = `
+          <div class="artist-info">
+            ${avatarHtml}
+            <div>
+              <strong>${art.name}</strong><br>
+              <span class="badge-cost">${art.cost} Gastoni</span>
+            </div>
+          </div>
+          <button class="btn btn-sm ${isSelected ? 'btn-outline' : ''}" onclick="toggleArtist(${art.id})">
+            ${isSelected ? 'Rimuovi' : 'Aggiungi'}
+          </button>
+        `;
+        container.appendChild(card);
+      });
+      updateMarketHeader();
+      renderCaptainPicker();
+    }
+
+    function toggleArtist(id) {
+      const idx = userState.selectedIds.indexOf(id);
+      if (idx > -1) {
+        userState.selectedIds.splice(idx, 1);
+        if (userState.captainId === id) userState.captainId = null;
+      } else {
+        if (userState.selectedIds.length >= 5) return alert("Puoi scegliere massimo 5 artisti!");
+        const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
+        const artCost = ARTISTS.find(a => a.id === id).cost;
+        if (currentCost + artCost > 100) return alert("Supereresti il budget di 100 Gastoni!");
+        userState.selectedIds.push(id);
+      }
+      renderArtistMarket();
+    }
+
+    function updateMarketHeader() {
+      const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
+      document.getElementById('budget-left').innerText = 100 - currentCost;
+      document.getElementById('selected-count').innerText = userState.selectedIds.length;
+    }
+
+    function renderCaptainPicker() {
+      const box = document.getElementById('captain-selection-box');
+      const container = document.getElementById('captain-picker-list');
+
+      if (userState.selectedIds.length !== 5) {
+        box.style.display = 'none';
+        return;
+      }
+
+      box.style.display = 'block';
+      container.innerHTML = "";
+
+      userState.selectedIds.forEach(id => {
+        const art = ARTISTS.find(a => a.id === id);
+        const isCap = userState.captainId === id;
+
+        const div = document.createElement('div');
+        div.className = `captain-picker-item ${isCap ? 'selected' : ''}`;
+        div.onclick = () => {
+          userState.captainId = id;
+          renderCaptainPicker();
+        };
+
+        div.innerHTML = `
+          <div><strong>${art.name}</strong></div>
+          <span style="font-weight:bold; color: ${isCap ? 'var(--gold)' : 'var(--text-muted)'}">
+            ${isCap ? '👑 CAPITANO (x2)' : 'Scegli come Capitano'}
+          </span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function saveSquad() {
+      if (userState.selectedIds.length !== 5) return alert("Devi selezionare
