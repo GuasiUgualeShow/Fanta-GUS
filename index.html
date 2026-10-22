@@ -66,7 +66,7 @@
     .rank-2 { background: #94a3b8; color: black; }
     .rank-3 { background: #b45309; color: white; }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
     .nav-item { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .nav-item.active { color: var(--accent); font-weight: bold; }
 
@@ -131,4 +131,177 @@
       </div>
 
       <!-- BOX LOGIN -->
-      <div class="card" id
+      <div class="card" id="box-login" style="display: none;">
+        <h2>Accedi alla tua Squadra</h2>
+        <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.9rem;">Inserisci Username e Password per controllare la tua squadra.</p>
+        
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="login-username" placeholder="La tua Username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="La tua password">
+        </div>
+        
+        <button class="btn" onclick="loginUser()">Accedi</button>
+        <button class="btn btn-secondary" onclick="toggleAuthMode('register')">Non hai una squadra? Registrati</button>
+      </div>
+
+    </div>
+
+    <!-- SCHERMATA SQUADRA (MERCATO) -->
+    <div id="page-squad" class="page">
+      <div class="alert-banner" style="background: rgba(245, 158, 11, 0.15); border-color: var(--gold); color: var(--gold);">
+        ⚠️ Seleziona <strong>5 artisti</strong> senza superare il budget di <strong>100 Gastoni</strong>!
+      </div>
+
+      <div class="budget-bar">
+        <span>Gastoni Rimanenti: <strong id="budget-left" style="color:var(--gold)">100</strong> / 100</span>
+        <span>Selezionati: <strong id="selected-count">0</strong>/5</span>
+      </div>
+
+      <h3 style="margin-bottom: 10px;">1. Scegli i tuoi 5 Artisti</h3>
+      <div class="artist-grid" id="artist-list"></div>
+
+      <div id="captain-selection-box" style="display: none; margin-top: 24px;">
+        <h3 style="margin-bottom: 10px; color: var(--gold);">2. Scegli il tuo Capitano 👑</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">I punti del Capitano verranno RADDOPPIATI (x2)!</p>
+        <div id="captain-picker-list"></div>
+      </div>
+
+      <!-- SEZIONE CONSULTAZIONE BONUS / MALUS -->
+      <div class="card" style="margin-top: 24px; border-color: var(--gold);">
+        <h3 style="color: var(--gold); margin-bottom: 10px;">📜 Regolamento Bonus e Malus</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Punteggi assegnati in tempo reale durante la serata:</p>
+        <ul class="rules-list">
+          <li><span>👏 Standing ovation del pubblico</span><strong style="color:var(--success);">+10 pt</strong></li>
+          <li><span>👔 Outfit stravagante</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>✋ Batte il cinque col presentatore</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>🥉 Entra nel podio</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>🏆 Vince la serata</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>👋 Saluta qualcuno del pubblico</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>📝 Dimentica il testo</span><strong style="color:var(--danger);">-5 pt</strong></li>
+          <li><span>🎶 Piccola stecca</span><strong style="color:var(--danger);">-5 pt</strong></li>
+          <li><span>🤸 Cade o inciampa sul palco</span><strong style="color:var(--danger);">-5 pt</strong></li>
+          <li><span>🎙️ Non funziona il microfono</span><strong style="color:var(--danger);">-5 pt</strong></li>
+        </ul>
+      </div>
+
+      <br>
+      <button class="btn" onclick="saveSquad()">Conferma e Salva Squadra</button>
+    </div>
+
+    <!-- SCHERMATA HOME -->
+    <div id="page-home" class="page">
+      <div class="card" style="text-align: center; border-color: var(--accent);">
+        <img id="dash-team-logo" class="team-header-logo" src="" style="display:none;" alt="Logo Squadra">
+        <div id="dash-default-avatar" class="avatar" style="width:70px; height:70px; font-size:1.8rem; margin: 0 auto 12px;">🛡️</div>
+        <h3 id="dash-team-name">Nome Squadra</h3>
+        <p id="dash-user" style="color: var(--text-muted); font-size: 0.85rem;">di Utente</p>
+        <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold); margin: 10px 0;" id="dash-points">0</div>
+        <p style="font-size: 0.85rem;">Punti Totali Accumulati</p>
+      </div>
+
+      <h3 style="margin-bottom: 10px;">La tua Rosa</h3>
+      <div class="artist-grid" id="my-team-list"></div>
+
+      <!-- SEZIONE CONSULTAZIONE BONUS / MALUS IN HOME -->
+      <div class="card" style="margin-top: 24px; border-color: var(--border);">
+        <h3 style="margin-bottom: 10px;">📋 Guida Punteggi Bonus/Malus</h3>
+        <ul class="rules-list">
+          <li><span>👏 Standing ovation</span><strong style="color:var(--success);">+10 pt</strong></li>
+          <li><span>👔 Outfit stravagante</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>✋ Batte il cinque col presentatore</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>🥉 Podio / 🏆 Vittoria</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>👋 Saluta il pubblico</span><strong style="color:var(--success);">+5 pt</strong></li>
+          <li><span>📝 Errore testo / 🎶 Stecca</span><strong style="color:var(--danger);">-5 pt</strong></li>
+          <li><span>🤸 Caduta / 🎙️ Problema Microfono</span><strong style="color:var(--danger);">-5 pt</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SCHERMATA CLASSIFICA -->
+    <div id="page-leaderboard" class="page">
+      <div class="card">
+        <h3>🏆 Classifica Generale</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Classifica aggiornata in tempo reale.</p>
+        <div class="leaderboard-list" id="leaderboard-container"></div>
+      </div>
+    </div>
+
+    <!-- SCHERMATA ADMIN -->
+    <div id="page-admin" class="page">
+      
+      <!-- TABELLA ISCRITTI ADMIN -->
+      <div class="card" style="border-color: var(--gold);">
+        <h3 style="color: var(--gold);">👥 Registro Iscritti (<span id="total-users-count">0</span>)</h3>
+        <div style="overflow-x: auto;">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Squadra</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚡ Assegnazione Rapida Punti</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Assegna un evento ad un artista durante la diretta:</p>
+        
+        <div class="form-group">
+          <label>Seleziona Artista</label>
+          <select id="admin-artist-select"></select>
+        </div>
+        
+        <div class="form-group">
+          <label>Bonus / Malus</label>
+          <select id="admin-points-select">
+            <option value="10">👏 Standing ovation del pubblico (+10)</option>
+            <option value="5">👔 Outfit stravagante (+5)</option>
+            <option value="5">✋ Batte il cinque col presentatore (+5)</option>
+            <option value="5">🥉 Entra nel podio (+5)</option>
+            <option value="5">🏆 Vince la serata (+5)</option>
+            <option value="5">👋 Saluta qualcuno del pubblico (+5)</option>
+            <option value="-5">📝 Dimentica il testo (-5)</option>
+            <option value="-5">🎶 Piccola stecca (-5)</option>
+            <option value="-5">🤸 Cade o inciampa sul palco (-5)</option>
+            <option value="-5">🎙️ Non funziona il microfono (-5)</option>
+          </select>
+        </div>
+
+        <button class="btn" onclick="applyAdminPoints()">Assegna Punti</button>
+      </div>
+
+      <div class="card" style="border-color: var(--danger);">
+        <h3 style="color: var(--danger);">⚠️ Area Reset Fine Manifestazione</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Cancella definitivamente tutte le iscrizioni e ripristina il database.</p>
+        <button class="btn" style="background-color: var(--danger);" onclick="resetAllData()">Resetta e Cancella Tutti i Dati</button>
+      </div>
+
+      <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti</h3>
+      <div id="admin-artist-boxes"></div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav" id="main-nav" style="display: none;">
+    <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
+    <div class="nav-item" onclick="showPage('squad', this)">🎸 Squadra</div>
+    <div class="nav-item" onclick="showPage('leaderboard', this)">🏆 Classifica</div>
+    <div class="nav-item" id="admin-nav-item" style="display: none;" onclick="showPage('admin', this)">⚡ Admin</div>
+  </div>
+
+  <script>
+    // Configurazione Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBS0Z6OWEpPVjYq0JDjszqRyjjVe6V_6a8",
+      authDomain: "fanta-gus-new.firebaseapp.com",
+      databaseURL: "https://fanta-gus-new-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fanta-gus-new",
+      storageBucket: "fanta-gus-new.firebasestorage.app",
+      messagingSender
