@@ -26,7 +26,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg-main); color: var(--text); padding-bottom: 70px; }
 
-    header { background: linear-gradient(135deg, #4c1d95, #8b5cf6); padding: 16px; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); user-select: none; }
+    header { background: linear-gradient(135deg, #4c1d95, #8b5cf6); padding: 16px; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); user-select: none; cursor: pointer; }
 
     .container { max-width: 500px; margin: 0 auto; padding: 16px; }
     .page { display: none; }
@@ -40,15 +40,25 @@
     .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 6px; }
     .btn:hover { background: var(--accent-hover); }
     .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+    .btn-highlight { background: rgba(245, 158, 11, 0.15); border: 2px solid var(--gold); color: var(--gold); font-weight: bold; }
+    .btn-highlight:hover { background: rgba(245, 158, 11, 0.25); }
     .btn-sm { padding: 6px 12px; font-size: 0.85rem; width: auto; }
     .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
     .btn-danger-icon { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: var(--danger); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; }
+
+    /* Admin Tabs Styling */
+    .admin-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #0f172a; padding: 4px; border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
+    .admin-tab-btn { flex: 1; padding: 8px 10px; font-size: 0.78rem; font-weight: bold; background: transparent; border: none; color: var(--text-muted); border-radius: 6px; cursor: pointer; text-align: center; white-space: nowrap; transition: 0.2s; }
+    .admin-tab-btn.active { background: var(--accent); color: white; }
+    .admin-tab-pane { display: none; }
+    .admin-tab-pane.active { display: block; }
 
     .alert-banner { background: rgba(139, 92, 246, 0.15); border: 1px solid var(--accent); color: var(--text); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4; }
     .disclaimer-text { text-align: center; color: var(--text-muted); font-size: 0.78rem; margin-top: 16px; font-style: italic; line-height: 1.3; }
 
     .artist-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    .artist-card { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; }
+    .artist-card { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 8px; }
+    .artist-card-top { display: flex; align-items: center; justify-content: space-between; }
     .artist-info { display: flex; align-items: center; gap: 12px; }
     
     .avatar { width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: bold; object-fit: cover; border: 2px solid var(--border); }
@@ -59,8 +69,8 @@
     .captain-picker-item.selected { border-color: var(--gold); background: rgba(245, 158, 11, 0.1); }
 
     .leaderboard-list { list-style: none; }
-    .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-card); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-    .leaderboard-item:hover { border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
+    .leaderboard-item, .admin-user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-card); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+    .leaderboard-item:hover, .admin-user-row:hover { border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
     .leaderboard-item.my-team { border-color: var(--gold); background: rgba(245, 158, 11, 0.05); }
     
     .rank-badge { width: 28px; height: 28px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; margin-right: 12px; }
@@ -82,15 +92,11 @@
     .rules-list { list-style: none; font-size: 0.85rem; }
     .rules-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border); }
     .rules-list li:last-child { border-bottom: none; }
-
-    .user-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.82rem; }
-    .user-table th, .user-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); }
-    .user-table th { color: var(--gold); background: #0f172a; }
   </style>
 </head>
 <body>
 
-  <header onclick="unlockAdmin()" style="cursor: pointer;">🎤 FANTA GUS</header>
+  <header onclick="unlockAdmin()">🎤 FANTA GUS</header>
 
   <div class="container">
 
@@ -124,7 +130,12 @@
         </div>
         
         <button class="btn" onclick="checkAndRegister()">Registra e Scegli la Rosa</button>
-        <button class="btn btn-secondary" onclick="toggleAuthMode('login')">Hai già una squadra? Accedi</button>
+        
+        <!-- Pulsante Accedi in evidenza -->
+        <div style="margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 12px; text-align: center;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Hai già creato la tua squadra?</p>
+          <button class="btn btn-highlight" onclick="toggleAuthMode('login')">🔑 Accedi alla tua Squadra</button>
+        </div>
 
         <p class="disclaimer-text">🤖 App sviluppata per fini goliardici e ludici.</p>
       </div>
@@ -196,6 +207,8 @@
         <p id="dash-user" style="color: var(--text-muted); font-size: 0.85rem;">di Utente</p>
         <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold); margin: 10px 0;" id="dash-points">0</div>
         <p style="font-size: 0.85rem;">Punti Totali Accumulati</p>
+        
+        <button class="btn btn-secondary btn-sm" style="margin-top: 14px; border-color: var(--danger); color: var(--danger);" onclick="userLogout()">🚪 Esci (Logout)</button>
       </div>
 
       <h3 style="margin-bottom: 10px;">La tua Rosa (Definitiva)</h3>
@@ -217,7 +230,7 @@
 
     <!-- SCHERMATA DETTAGLIO SQUADRA ALTRUI (ISPEZIONE) -->
     <div id="page-view-team" class="page">
-      <button class="btn btn-secondary btn-sm" style="margin-bottom: 16px;" onclick="showPage('leaderboard')">⬅️ Torna alla Classifica</button>
+      <button class="btn btn-secondary btn-sm" style="margin-bottom: 16px;" onclick="goBackFromView()">⬅️ Indietro</button>
       
       <div class="card" style="text-align: center; border-color: var(--gold);">
         <img id="view-team-logo" class="team-header-logo" src="" style="display:none;" alt="Logo Squadra">
@@ -241,54 +254,83 @@
       </div>
     </div>
 
-    <!-- SCHERMATA ADMIN -->
+    <!-- SCHERMATA ADMIN CON SCHEDE -->
     <div id="page-admin" class="page">
-      <div class="card" style="border-color: var(--gold);">
-        <h3 style="color: var(--gold);">👥 Registro Iscritti (<span id="total-users-count">0</span>)</h3>
-        <div style="overflow-x: auto;">
-          <table class="user-table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Squadra</th>
-              </tr>
-            </thead>
-            <tbody id="admin-users-tbody"></tbody>
-          </table>
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; border-color: var(--gold);">
+        <div>
+          <h3 style="color: var(--gold);">⚡ Pannello Admin</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Controllo totale manifestazione</p>
+        </div>
+        <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="adminLogout()">🔒 Logout</button>
+      </div>
+
+      <!-- Menu delle Schede Admin -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" onclick="switchAdminTab('tab-users', this)">👥 Iscritti</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('tab-teams', this)">🎸 Squadre & Rosa</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('tab-points', this)">⚡ Gestione Punti</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('tab-rank', this)">🏆 Classifica</button>
+      </div>
+
+      <!-- SCHEDA 1: ISCRITTI -->
+      <div id="tab-users" class="admin-tab-pane active">
+        <div class="card" style="border-color: var(--gold);">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">Elenco Iscritti (<span id="total-users-count">0</span>)</h3>
+          <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
       </div>
 
-      <div class="card">
-        <h3>⚡ Assegnazione Rapida Punti</h3>
-        <div class="form-group">
-          <label>Seleziona Artista</label>
-          <select id="admin-artist-select"></select>
+      <!-- SCHEDA 2: TUTTE LE SQUADRE E ARTISTI CON BONUS/MALUS -->
+      <div id="tab-teams" class="admin-tab-pane">
+        <div class="card">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">Tutte le Squadre Registrate</h3>
+          <div id="admin-all-teams-container" style="display: flex; flex-direction: column; gap: 16px;"></div>
         </div>
-        <div class="form-group">
-          <label>Bonus / Malus</label>
-          <select id="admin-points-select">
-            <option value="10">👏 Standing ovation del pubblico (+10)</option>
-            <option value="5">👔 Outfit stravagante (+5)</option>
-            <option value="5">✋ Batte il cinque col presentatore (+5)</option>
-            <option value="5">🥉 Entra nel podio (+5)</option>
-            <option value="5">🏆 Vince la serata (+5)</option>
-            <option value="5">👋 Saluta qualcuno del pubblico (+5)</option>
-            <option value="-5">📝 Dimentica il testo (-5)</option>
-            <option value="-5">🎶 Piccola stecca (-5)</option>
-            <option value="-5">🤸 Cade o inciampa sul palco (-5)</option>
-            <option value="-5">🎙️ Non funziona il microfono (-5)</option>
-          </select>
-        </div>
-        <button class="btn" onclick="applyAdminPoints()">Assegna Punti</button>
       </div>
 
-      <div class="card" style="border-color: var(--danger);">
-        <h3 style="color: var(--danger);">⚠️ Area Reset Fine Manifestazione</h3>
-        <button class="btn" style="background-color: var(--danger);" onclick="resetAllData()">Resetta e Cancella Tutti i Dati</button>
+      <!-- SCHEDA 3: ASSEGNAZIONE BONUS E MALUS -->
+      <div id="tab-points" class="admin-tab-pane">
+        <div class="card">
+          <h3>⚡ Assegna Bonus o Malus</h3>
+          <div class="form-group">
+            <label>Seleziona Artista</label>
+            <select id="admin-artist-select"></select>
+          </div>
+          <div class="form-group">
+            <label>Bonus / Malus</label>
+            <select id="admin-points-select">
+              <option value="10">👏 Standing ovation del pubblico (+10)</option>
+              <option value="5">👔 Outfit stravagante (+5)</option>
+              <option value="5">✋ Batte il cinque col presentatore (+5)</option>
+              <option value="5">🥉 Entra nel podio (+5)</option>
+              <option value="5">🏆 Vince la serata (+5)</option>
+              <option value="5">👋 Saluta qualcuno del pubblico (+5)</option>
+              <option value="-5">📝 Dimentica il testo (-5)</option>
+              <option value="-5">🎶 Piccola stecca (-5)</option>
+              <option value="-5">🤸 Cade o inciampa sul palco (-5)</option>
+              <option value="-5">🎙️ Non funziona il microfono (-5)</option>
+            </select>
+          </div>
+          <button class="btn" onclick="applyAdminPoints()">Conferma e Assegna Punti</button>
+        </div>
+
+        <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti & Eventi</h3>
+        <div id="admin-artist-boxes"></div>
+
+        <div class="card" style="border-color: var(--danger); margin-top: 24px;">
+          <h3 style="color: var(--danger);">⚠️ Area Reset Fine Manifestazione</h3>
+          <button class="btn" style="background-color: var(--danger);" onclick="resetAllData()">Resetta e Cancella Tutti i Dati</button>
+        </div>
       </div>
 
-      <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti</h3>
-      <div id="admin-artist-boxes"></div>
+      <!-- SCHEDA 4: CLASSIFICA ADMIN -->
+      <div id="tab-rank" class="admin-tab-pane">
+        <div class="card">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">🏆 Classifica in Tempo Reale</h3>
+          <div class="leaderboard-list" id="admin-leaderboard-container"></div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -311,8 +353,13 @@
       appId: "1:1097810685766:web:6aab0144cfff328e437f47"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    let db = null;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch (e) {
+      console.log("Firebase non inizializzato o offline:", e);
+    }
 
     const ARTISTS = [
       { id: 1, name: "Lorenzo Giuliani", cost: 25, points: 0, image: "https://drive.google.com/thumbnail?id=1KG97E1D3qCnLsUc4hnOdrcMD6UXfCr8D&sz=w1000" },
@@ -332,31 +379,73 @@
     ];
 
     let pointLogs = [];
-    let userState = { id: null, username: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+    let userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
     let allTeamsCache = {};
+    let previousPage = 'leaderboard';
+
+    // Funzione per commutare tra registrazione e login
+    function toggleAuthMode(mode) {
+      const boxRegister = document.getElementById('box-register');
+      const boxLogin = document.getElementById('box-login');
+      
+      if (mode === 'login') {
+        if (boxRegister) boxRegister.style.display = 'none';
+        if (boxLogin) boxLogin.style.display = 'block';
+      } else {
+        if (boxLogin) boxLogin.style.display = 'none';
+        if (boxRegister) boxRegister.style.display = 'block';
+      }
+    }
 
     function unlockAdmin() {
       const pin = prompt("Inserisci il PIN Admin:");
       if (pin === "1234") {
         const adminBtn = document.getElementById('admin-nav-item');
-        adminBtn.style.display = 'flex';
+        if (adminBtn) adminBtn.style.display = 'flex';
         alert("Modalità Admin Sbloccata!");
         populateAdminSelect();
-        loadAdminUsersList();
+        loadAdminData();
         showPage('admin', adminBtn);
       } else if (pin !== null) {
         alert("PIN errato!");
       }
     }
 
-    function toggleAuthMode(mode) {
-      if (mode === 'login') {
-        document.getElementById('box-register').style.display = 'none';
-        document.getElementById('box-login').style.display = 'block';
+    function adminLogout() {
+      const adminNavItem = document.getElementById('admin-nav-item');
+      if (adminNavItem) adminNavItem.style.display = 'none';
+      if (userState.id) {
+        showPage('home');
       } else {
-        document.getElementById('box-login').style.display = 'none';
-        document.getElementById('box-register').style.display = 'block';
+        showPage('auth');
       }
+      alert("Logout Admin effettuato.");
+    }
+
+    function userLogout() {
+      if (confirm("Vuoi davvero uscire dalla tua squadra?")) {
+        userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+        const mainNav = document.getElementById('main-nav');
+        const navSquad = document.getElementById('nav-squad-item');
+        const adminNav = document.getElementById('admin-nav-item');
+        if (mainNav) mainNav.style.display = 'none';
+        if (navSquad) navSquad.style.display = 'none';
+        if (adminNav) adminNav.style.display = 'none';
+        toggleAuthMode('register');
+        showPage('auth');
+      }
+    }
+
+    function switchAdminTab(tabId, btnEl) {
+      document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) targetTab.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+
+      if (tabId === 'tab-teams') renderAdminAllTeams();
+      if (tabId === 'tab-rank') renderAdminLeaderboard();
     }
 
     function checkAndRegister() {
@@ -394,9 +483,12 @@
     }
 
     function proceedToMarket() {
-      document.getElementById('page-auth').style.display = 'none';
-      document.getElementById('main-nav').style.display = 'flex';
-      document.getElementById('nav-squad-item').style.display = 'flex';
+      const authPage = document.getElementById('page-auth');
+      const mainNav = document.getElementById('main-nav');
+      const navSquad = document.getElementById('nav-squad-item');
+      if (authPage) authPage.style.display = 'none';
+      if (mainNav) mainNav.style.display = 'flex';
+      if (navSquad) navSquad.style.display = 'flex';
       renderArtistMarket();
       showPage('squad');
     }
@@ -406,6 +498,11 @@
       const p = document.getElementById('login-password').value.trim();
 
       if (!u || !p) return alert("Inserisci Username e Password!");
+
+      if (!db) {
+        alert("Modalità offline: impossibile connettersi al database.");
+        return;
+      }
 
       db.ref('teams').once('value').then(snapshot => {
         const data = snapshot.val();
@@ -450,6 +547,7 @@
 
     function renderArtistMarket() {
       const container = document.getElementById('artist-list');
+      if (!container) return;
       container.innerHTML = "";
       
       ARTISTS.forEach(art => {
@@ -462,16 +560,18 @@
           : `<div class="avatar">${art.name.charAt(0)}</div>`;
 
         card.innerHTML = `
-          <div class="artist-info">
-            ${avatarHtml}
-            <div>
-              <strong>${art.name}</strong><br>
-              <span class="badge-cost">${art.cost} Gastoni</span>
+          <div class="artist-card-top">
+            <div class="artist-info">
+              ${avatarHtml}
+              <div>
+                <strong>${art.name}</strong><br>
+                <span class="badge-cost">${art.cost} Gastoni</span>
+              </div>
             </div>
+            <button class="btn btn-sm ${isSelected ? 'btn-outline' : ''}" onclick="toggleArtist(${art.id})">
+              ${isSelected ? 'Rimuovi' : 'Aggiungi'}
+            </button>
           </div>
-          <button class="btn btn-sm ${isSelected ? 'btn-outline' : ''}" onclick="toggleArtist(${art.id})">
-            ${isSelected ? 'Rimuovi' : 'Aggiungi'}
-          </button>
         `;
         container.appendChild(card);
       });
@@ -496,13 +596,16 @@
 
     function updateMarketHeader() {
       const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
-      document.getElementById('budget-left').innerText = 100 - currentCost;
-      document.getElementById('selected-count').innerText = userState.selectedIds.length;
+      const budgetLeft = document.getElementById('budget-left');
+      const selectedCount = document.getElementById('selected-count');
+      if (budgetLeft) budgetLeft.innerText = 100 - currentCost;
+      if (selectedCount) selectedCount.innerText = userState.selectedIds.length;
     }
 
     function renderCaptainPicker() {
       const box = document.getElementById('captain-selection-box');
       const container = document.getElementById('captain-picker-list');
+      if (!box || !container) return;
 
       if (userState.selectedIds.length !== 5) {
         box.style.display = 'none';
@@ -537,6 +640,14 @@
       if (userState.selectedIds.length !== 5) return alert("Devi selezionare esattamente 5 artisti!");
       if (!userState.captainId) return alert("Devi scegliere un Capitano!");
 
+      if (!db) {
+        alert("Salvataggio simulato in locale (offline).");
+        document.getElementById('nav-squad-item').style.display = 'none';
+        updateDashboard();
+        showPage('home');
+        return;
+      }
+
       if (!userState.id) {
         const userRef = db.ref('teams').push();
         userState.id = userRef.key;
@@ -570,117 +681,121 @@
       return total;
     }
 
+    function renderTeamArtistsList(team, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!team.selectedIds) return;
+
+      team.selectedIds.forEach(id => {
+        const art = ARTISTS.find(a => a.id === id);
+        if (art) {
+          const isCap = id === team.captainId;
+          const basePts = art.points;
+          const finalPts = isCap ? basePts * 2 : basePts;
+
+          const artistLogs = pointLogs.filter(l => l.artistId === art.id);
+          let logsHtml = "";
+          if (artistLogs.length > 0) {
+            logsHtml = `<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); display:flex; flex-direction:column; gap:4px;">` +
+              artistLogs.map(log => `
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
+                  <span>• ${log.label}</span>
+                  <strong style="color:${log.points > 0 ? 'var(--success)' : 'var(--danger)'};">${log.points > 0 ? '+' : ''}${log.points} pt</strong>
+                </div>
+              `).join('') + `</div>`;
+          } else {
+            logsHtml = `<div style="font-size:0.78rem; color:var(--text-muted); font-style:italic; margin-top:4px;">Nessun bonus/malus assegnato</div>`;
+          }
+
+          const avatarHtml = (art.image && art.image.trim() !== "") 
+            ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
+            : `<div class="avatar">${art.name.charAt(0)}</div>`;
+
+          const card = document.createElement('div');
+          card.className = "artist-card";
+          card.innerHTML = `
+            <div class="artist-card-top">
+              <div class="artist-info">
+                ${avatarHtml}
+                <div>
+                  <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}<br>
+                  <span style="font-size:0.8rem; color:var(--text-muted)">Totale artista: ${basePts} pt</span>
+                </div>
+              </div>
+              <strong style="color:var(--gold); font-size:1.1rem;">+${finalPts} pt</strong>
+            </div>
+            ${logsHtml}
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+
     function updateDashboard() {
-      document.getElementById('dash-team-name').innerText = userState.teamName;
-      document.getElementById('dash-user').innerText = "di " + userState.username;
+      const dashTeamName = document.getElementById('dash-team-name');
+      const dashUser = document.getElementById('dash-user');
+      if (dashTeamName) dashTeamName.innerText = userState.teamName;
+      if (dashUser) dashUser.innerText = "di " + userState.username;
 
       const logoImg = document.getElementById('dash-team-logo');
       const defaultAvatar = document.getElementById('dash-default-avatar');
 
       if (userState.teamLogoUrl) {
-        logoImg.src = userState.teamLogoUrl;
-        logoImg.style.display = 'block';
-        defaultAvatar.style.display = 'none';
+        if (logoImg) { logoImg.src = userState.teamLogoUrl; logoImg.style.display = 'block'; }
+        if (defaultAvatar) defaultAvatar.style.display = 'none';
       } else {
-        logoImg.style.display = 'none';
-        defaultAvatar.style.display = 'flex';
+        if (logoImg) logoImg.style.display = 'none';
+        if (defaultAvatar) defaultAvatar.style.display = 'flex';
       }
 
       const totalPoints = calculatePoints(userState);
-      const myTeamContainer = document.getElementById('my-team-list');
-      myTeamContainer.innerHTML = "";
+      const dashPoints = document.getElementById('dash-points');
+      if (dashPoints) dashPoints.innerText = totalPoints;
 
-      if (userState.selectedIds) {
-        userState.selectedIds.forEach(id => {
-          const art = ARTISTS.find(a => a.id === id);
-          if (art) {
-            const isCap = id === userState.captainId;
-            const pts = isCap ? art.points * 2 : art.points;
-
-            const avatarHtml = (art.image && art.image.trim() !== "") 
-              ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
-              : `<div class="avatar">${art.name.charAt(0)}</div>`;
-
-            const card = document.createElement('div');
-            card.className = "artist-card";
-            card.innerHTML = `
-              <div class="artist-info">
-                ${avatarHtml}
-                <div>
-                  <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}<br>
-                  <span style="font-size:0.8rem; color:var(--text-muted)">Punti base: ${art.points}</span>
-                </div>
-              </div>
-              <strong style="color:var(--gold); font-size:1.1rem;">+${pts} pt</strong>
-            `;
-            myTeamContainer.appendChild(card);
-          }
-        });
-      }
-
-      document.getElementById('dash-points').innerText = totalPoints;
+      renderTeamArtistsList(userState, 'my-team-list');
       renderLeaderboard();
     }
 
-    function viewOtherTeam(teamKey) {
+    function viewOtherTeam(teamKey, fromPage = 'leaderboard') {
+      previousPage = fromPage;
       const team = allTeamsCache[teamKey];
       if (!team) return;
 
-      document.getElementById('view-team-name').innerText = team.teamName;
-      document.getElementById('view-user').innerText = "di " + team.username;
+      const viewTeamName = document.getElementById('view-team-name');
+      const viewUser = document.getElementById('view-user');
+      if (viewTeamName) viewTeamName.innerText = team.teamName;
+      if (viewUser) viewUser.innerText = "di " + team.username;
 
       const logoImg = document.getElementById('view-team-logo');
       const defaultAvatar = document.getElementById('view-default-avatar');
 
       if (team.teamLogoUrl) {
-        logoImg.src = team.teamLogoUrl;
-        logoImg.style.display = 'block';
-        defaultAvatar.style.display = 'none';
+        if (logoImg) { logoImg.src = team.teamLogoUrl; logoImg.style.display = 'block'; }
+        if (defaultAvatar) defaultAvatar.style.display = 'none';
       } else {
-        logoImg.style.display = 'none';
-        defaultAvatar.style.display = 'flex';
+        if (logoImg) logoImg.style.display = 'none';
+        if (defaultAvatar) defaultAvatar.style.display = 'flex';
       }
 
       const totalPts = calculatePoints(team);
-      document.getElementById('view-points').innerText = totalPts;
+      const viewPoints = document.getElementById('view-points');
+      if (viewPoints) viewPoints.innerText = totalPts;
 
-      const container = document.getElementById('view-team-artists');
-      container.innerHTML = "";
-
-      if (team.selectedIds) {
-        team.selectedIds.forEach(id => {
-          const art = ARTISTS.find(a => a.id === id);
-          if (art) {
-            const isCap = id === team.captainId;
-            const pts = isCap ? art.points * 2 : art.points;
-
-            const avatarHtml = (art.image && art.image.trim() !== "") 
-              ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
-              : `<div class="avatar">${art.name.charAt(0)}</div>`;
-
-            const card = document.createElement('div');
-            card.className = "artist-card";
-            card.innerHTML = `
-              <div class="artist-info">
-                ${avatarHtml}
-                <div>
-                  <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}<br>
-                  <span style="font-size:0.8rem; color:var(--text-muted)">Punti base: ${art.points}</span>
-                </div>
-              </div>
-              <strong style="color:var(--gold); font-size:1.1rem;">+${pts} pt</strong>
-            `;
-            container.appendChild(card);
-          }
-        });
-      }
-
+      renderTeamArtistsList(team, 'view-team-artists');
       showPage('view-team');
+    }
+
+    function goBackFromView() {
+      showPage(previousPage);
     }
 
     function renderLeaderboard() {
       const container = document.getElementById('leaderboard-container');
       if (!container) return;
+
+      if (!db) return;
 
       db.ref('teams').on('value', snapshot => {
         container.innerHTML = "";
@@ -709,7 +824,7 @@
 
           const div = document.createElement('div');
           div.className = `leaderboard-item ${t.isMe ? 'my-team' : ''}`;
-          div.onclick = () => viewOtherTeam(t.key);
+          div.onclick = () => viewOtherTeam(t.key, 'leaderboard');
 
           div.innerHTML = `
             <div style="display:flex; align-items:center;">
@@ -725,42 +840,154 @@
       });
     }
 
-    function loadAdminUsersList() {
+    function loadAdminData() {
+      if (!db) return;
       db.ref('teams').on('value', snapshot => {
-        const tbody = document.getElementById('admin-users-tbody');
-        if (!tbody) return;
-        tbody.innerHTML = "";
+        const container = document.getElementById('admin-users-list');
+        if (!container) return;
+        container.innerHTML = "";
         const data = snapshot.val();
+        allTeamsCache = data || {};
         let count = 0;
 
         if (data) {
-          Object.values(data).forEach(u => {
+          Object.keys(data).forEach(key => {
+            const u = data[key];
             count++;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td><strong>${u.username}</strong></td><td>${u.teamName}</td>`;
-            tbody.appendChild(tr);
+            const div = document.createElement('div');
+            div.className = "admin-user-row";
+            div.onclick = () => viewOtherTeam(key, 'admin');
+            div.innerHTML = `
+              <div>
+                <strong>Squadra: ${u.teamName}</strong><br>
+                <span style="font-size:0.8rem; color:var(--text-muted);">User: <strong>${u.username}</strong> | Pass: <strong>${u.password}</strong></span>
+              </div>
+              <span style="font-size:0.75rem; color:var(--accent);">🔍 Ispeziona</span>
+            `;
+            container.appendChild(div);
           });
         }
-        document.getElementById('total-users-count').innerText = count;
+        const totalUsersCount = document.getElementById('total-users-count');
+        if (totalUsersCount) totalUsersCount.innerText = count;
       });
     }
 
-    db.ref('artists').on('value', snapshot => {
-      const data = snapshot.val();
-      if (data) {
-        ARTISTS.forEach(art => {
-          if (data[art.id] !== undefined) art.points = data[art.id].points || 0;
-        });
+    function renderAdminAllTeams() {
+      const container = document.getElementById('admin-all-teams-container');
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!allTeamsCache || Object.keys(allTeamsCache).length === 0) {
+        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">Nessuna squadra registrata al momento.</p>`;
+        return;
+      }
+
+      Object.keys(allTeamsCache).forEach(key => {
+        const t = allTeamsCache[key];
+        const totalPts = calculatePoints(t);
+
+        const card = document.createElement('div');
+        card.className = "card";
+        card.style.borderColor = "var(--border)";
+
+        let artistsHtml = "";
+        if (t.selectedIds) {
+          t.selectedIds.forEach(artId => {
+            const art = ARTISTS.find(a => a.id === artId);
+            if (art) {
+              const isCap = artId === t.captainId;
+              const basePts = art.points;
+              const finalPts = isCap ? basePts * 2 : basePts;
+
+              const artistLogs = pointLogs.filter(l => l.artistId === art.id);
+              let logsList = artistLogs.length > 0 
+                ? artistLogs.map(l => `<span style="font-size:0.72rem; background:#0f172a; padding:2px 6px; border-radius:4px; border:1px solid var(--border);">${l.label} (${l.points > 0 ? '+' : ''}${l.points})</span>`).join(' ')
+                : `<span style="font-size:0.72rem; color:var(--text-muted); font-style:italic;">Nessun bonus/malus</span>`;
+
+              artistsHtml += `
+                <div style="background: #0f172a; padding: 8px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--border);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                    <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}
+                    <strong style="color:var(--gold);">+${finalPts} pt</strong>
+                  </div>
+                  <div style="display:flex; flex-wrap:wrap; gap:4px;">${logsList}</div>
+                </div>
+              `;
+            }
+          });
+        }
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <div>
+              <h4 style="color:var(--gold);">${t.teamName}</h4>
+              <span style="font-size:0.8rem; color:var(--text-muted);">di ${t.username}</span>
+            </div>
+            <strong style="font-size:1.2rem; color:var(--gold);">${totalPts} pt</strong>
+          </div>
+          <div>${artistsHtml}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderAdminLeaderboard() {
+      const container = document.getElementById('admin-leaderboard-container');
+      if (!container) return;
+      container.innerHTML = "";
+
+      let leaderboard = [];
+      Object.keys(allTeamsCache).forEach(key => {
+        const t = allTeamsCache[key];
+        const pts = calculatePoints(t);
+        leaderboard.push({ key: key, teamName: t.teamName, points: pts });
+      });
+
+      leaderboard.sort((a, b) => b.points - a.points);
+
+      if (leaderboard.length === 0) {
+        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">Nessuna squadra in classifica.</p>`;
+        return;
+      }
+
+      leaderboard.forEach((t, index) => {
+        const rank = index + 1;
+        let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
+
+        const div = document.createElement('div');
+        div.className = "leaderboard-item";
+        div.onclick = () => viewOtherTeam(t.key, 'admin');
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:center;">
+            <div class="rank-badge ${rankClass}">${rank}</div>
+            <div><strong>${t.teamName}</strong></div>
+          </div>
+          <strong style="color:var(--gold); font-size:1.1rem;">${t.points} pt</strong>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    if (db) {
+      db.ref('artists').on('value', snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          ARTISTS.forEach(art => {
+            if (data[art.id] !== undefined) art.points = data[art.id].points || 0;
+          });
+          updateDashboard();
+          renderAdminBoxes();
+        }
+      });
+
+      db.ref('pointLogs').on('value', snapshot => {
+        const data = snapshot.val();
+        pointLogs = data ? Object.values(data) : [];
         updateDashboard();
         renderAdminBoxes();
-      }
-    });
-
-    db.ref('pointLogs').on('value', snapshot => {
-      const data = snapshot.val();
-      pointLogs = data ? Object.values(data) : [];
-      renderAdminBoxes();
-    });
+      });
+    }
 
     function populateAdminSelect() {
       const sel = document.getElementById('admin-artist-select');
@@ -779,17 +1006,25 @@
       const pts = parseInt(selectEl.value);
       const label = selectEl.options[selectEl.selectedIndex].text;
       
+      const alreadyAssigned = pointLogs.some(log => log.artistId === artId && log.label === label);
+      if (alreadyAssigned) {
+        return alert(`⚠️ Questo bonus/malus ("${label}") è già stato assegnato a questo artista! Non può essere assegnato due volte.`);
+      }
+
       const art = ARTISTS.find(a => a.id === artId);
       const newPoints = art.points + pts;
 
-      db.ref('artists/' + artId).set({ points: newPoints });
-      const logId = Date.now();
-      db.ref('pointLogs/' + logId).set({ id: logId, artistId: artId, artistName: art.name, points: pts, label: label });
+      if (db) {
+        db.ref('artists/' + artId).set({ points: newPoints });
+        const logId = Date.now();
+        db.ref('pointLogs/' + logId).set({ id: logId, artistId: artId, artistName: art.name, points: pts, label: label });
+      }
+      alert("Punti assegnati con successo!");
     }
 
     function removeAdminPoint(logId) {
       const log = pointLogs.find(l => l.id === logId);
-      if (log) {
+      if (log && db) {
         const art = ARTISTS.find(a => a.id === log.artistId);
         const newPoints = art.points - log.points;
         db.ref('artists/' + log.artistId).set({ points: newPoints });
@@ -798,7 +1033,7 @@
     }
 
     function resetAllData() {
-      if (confirm("Attenzione: vuoi davvero cancellare tutte le squadre e azzerare i punti?")) {
+      if (confirm("Attenzione: vuoi davvero cancellare tutte le squadre e azzerare i punti?") && db) {
         db.ref('artists').remove();
         db.ref('pointLogs').remove();
         db.ref('teams').remove();
@@ -819,34 +1054,3 @@
         let logsHtml = (artLogs.length === 0) 
           ? `<div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nessun bonus/malus</div>`
           : artLogs.map(log => `<div class="admin-log-entry"><span>${log.label}</span><button class="btn-danger-icon" onclick="removeAdminPoint(${log.id})">❌</button></div>`).join('');
-
-        box.innerHTML = `
-          <div class="admin-artist-header">
-            <strong>${art.name}</strong>
-            <span style="font-size:1.1rem; font-weight:bold; color:var(--gold);">${art.points > 0 ? '+' : ''}${art.points} pt</span>
-          </div>
-          <div>${logsHtml}</div>
-        `;
-        container.appendChild(box);
-      });
-    }
-
-    function showPage(pageId, navEl) {
-      document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-      const target = document.getElementById('page-' + pageId);
-      if (target) target.style.display = 'block';
-      
-      if (navEl) {
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        navEl.classList.add('active');
-      }
-
-      if (pageId === 'leaderboard') renderLeaderboard();
-      if (pageId === 'admin') {
-        renderAdminBoxes();
-        loadAdminUsersList();
-      }
-    }
-  </script>
-</body>
-</html>
