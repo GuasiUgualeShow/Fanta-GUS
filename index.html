@@ -96,7 +96,7 @@
 </head>
 <body>
 
-  <header onclick="unlockAdmin()">🎤 FANTA GUS</header>
+  <header onclick="window.unlockAdmin()">🎤 FANTA GUS</header>
 
   <div class="container">
 
@@ -129,12 +129,12 @@
           <input type="file" id="reg-logo" accept="image/*">
         </div>
         
-        <button class="btn" onclick="checkAndRegister()">Registra e Scegli la Rosa</button>
+        <button class="btn" onclick="window.checkAndRegister()">Registra e Scegli la Rosa</button>
         
         <!-- Pulsante Accedi in evidenza -->
         <div style="margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 12px; text-align: center;">
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Hai già creato la tua squadra?</p>
-          <button class="btn btn-highlight" onclick="toggleAuthMode('login')">🔑 Accedi alla tua Squadra</button>
+          <button class="btn btn-highlight" onclick="window.toggleAuthMode('login')">🔑 Accedi alla tua Squadra</button>
         </div>
 
         <p class="disclaimer-text">🤖 App sviluppata per fini goliardici e ludici.</p>
@@ -153,8 +153,8 @@
           <input type="password" id="login-password" placeholder="La tua password">
         </div>
         
-        <button class="btn" onclick="loginUser()">Accedi</button>
-        <button class="btn btn-secondary" onclick="toggleAuthMode('register')">Non hai una squadra? Registrati</button>
+        <button class="btn" onclick="window.loginUser()">Accedi</button>
+        <button class="btn btn-secondary" onclick="window.toggleAuthMode('register')">Non hai una squadra? Registrati</button>
       </div>
     </div>
 
@@ -195,7 +195,7 @@
       </div>
 
       <br>
-      <button class="btn" onclick="saveSquad()">Conferma e Salva Squadra (Definitivo)</button>
+      <button class="btn" onclick="window.saveSquad()">Conferma e Salva Squadra (Definitivo)</button>
     </div>
 
     <!-- SCHERMATA HOME -->
@@ -208,7 +208,7 @@
         <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold); margin: 10px 0;" id="dash-points">0</div>
         <p style="font-size: 0.85rem;">Punti Totali Accumulati</p>
         
-        <button class="btn btn-secondary btn-sm" style="margin-top: 14px; border-color: var(--danger); color: var(--danger);" onclick="userLogout()">🚪 Esci (Logout)</button>
+        <button class="btn btn-secondary btn-sm" style="margin-top: 14px; border-color: var(--danger); color: var(--danger);" onclick="window.userLogout()">🚪 Esci (Logout)</button>
       </div>
 
       <h3 style="margin-bottom: 10px;">La tua Rosa (Definitiva)</h3>
@@ -230,4 +230,300 @@
 
     <!-- SCHERMATA DETTAGLIO SQUADRA ALTRUI (ISPEZIONE) -->
     <div id="page-view-team" class="page">
-      <button class="btn btn-secondary btn-sm" style="margin-bottom: 16px;" onclick="goBackFromView()">⬅️ Indietro
+      <button class="btn btn-secondary btn-sm" style="margin-bottom: 16px;" onclick="window.goBackFromView()">⬅️ Indietro</button>
+      
+      <div class="card" style="text-align: center; border-color: var(--gold);">
+        <img id="view-team-logo" class="team-header-logo" src="" style="display:none;" alt="Logo Squadra">
+        <div id="view-default-avatar" class="avatar" style="width:70px; height:70px; font-size:1.8rem; margin: 0 auto 12px;">🛡️</div>
+        <h3 id="view-team-name">Nome Squadra</h3>
+        <p id="view-user" style="color: var(--text-muted); font-size: 0.85rem;">di Utente</p>
+        <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold); margin: 10px 0;" id="view-points">0</div>
+        <p style="font-size: 0.85rem;">Punti Totali</p>
+      </div>
+
+      <h3 style="margin-bottom: 10px;">Rosa Schierata</h3>
+      <div class="artist-grid" id="view-team-artists"></div>
+    </div>
+
+    <!-- SCHERMATA CLASSIFICA -->
+    <div id="page-leaderboard" class="page">
+      <div class="card">
+        <h3>🏆 Classifica Generale</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Clicca sul nome di una squadra per visualizzare la sua rosa di artisti.</p>
+        <div class="leaderboard-list" id="leaderboard-container"></div>
+      </div>
+    </div>
+
+    <!-- SCHERMATA ADMIN CON LE 4 SCHEDE RICHIESTE -->
+    <div id="page-admin" class="page">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; border-color: var(--gold);">
+        <div>
+          <h3 style="color: var(--gold);">⚡ Pannello Admin</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Controllo totale manifestazione</p>
+        </div>
+        <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="window.adminLogout()">🔒 Logout</button>
+      </div>
+
+      <!-- Menu delle Schede Admin -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" onclick="window.switchAdminTab('tab-users', this)">👥 Iscritti</button>
+        <button class="admin-tab-btn" onclick="window.switchAdminTab('tab-teams', this)">🎸 Squadre & Rosa</button>
+        <button class="admin-tab-btn" onclick="window.switchAdminTab('tab-points', this)">⚡ Gestione Punti</button>
+        <button class="admin-tab-btn" onclick="window.switchAdminTab('tab-rank', this)">🏆 Classifica</button>
+      </div>
+
+      <!-- SCHEDA 1: ISCRITTI -->
+      <div id="tab-users" class="admin-tab-pane active">
+        <div class="card" style="border-color: var(--gold);">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">Elenco Iscritti (<span id="total-users-count">0</span>)</h3>
+          <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+      </div>
+
+      <!-- SCHEDA 2: TUTTE LE SQUADRE -->
+      <div id="tab-teams" class="admin-tab-pane">
+        <div class="card">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">Tutte le Squadre & Roster</h3>
+          <div id="admin-all-teams-container" style="display: flex; flex-direction: column; gap: 16px;"></div>
+        </div>
+      </div>
+
+      <!-- SCHEDA 3: ASSEGNAZIONE BONUS E MALUS -->
+      <div id="tab-points" class="admin-tab-pane">
+        <div class="card">
+          <h3>⚡ Assegna Bonus o Malus</h3>
+          <div class="form-group">
+            <label>Seleziona Artista</label>
+            <select id="admin-artist-select"></select>
+          </div>
+          <div class="form-group">
+            <label>Bonus / Malus</label>
+            <select id="admin-points-select">
+              <option value="10">👏 Standing ovation del pubblico (+10)</option>
+              <option value="5">👔 Outfit stravagante (+5)</option>
+              <option value="5">✋ Batte il cinque col presentatore (+5)</option>
+              <option value="5">🥉 Entra nel podio (+5)</option>
+              <option value="5">🏆 Vince la serata (+5)</option>
+              <option value="5">👋 Saluta qualcuno del pubblico (+5)</option>
+              <option value="-5">📝 Dimentica il testo (-5)</option>
+              <option value="-5">🎶 Piccola stecca (-5)</option>
+              <option value="-5">🤸 Cade o inciampa sul palco (-5)</option>
+              <option value="-5">🎙️ Non funziona il microfono (-5)</option>
+            </select>
+          </div>
+          <button class="btn" onclick="window.applyAdminPoints()">Conferma e Assegna Punti</button>
+        </div>
+
+        <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti & Eventi</h3>
+        <div id="admin-artist-boxes"></div>
+
+        <div class="card" style="border-color: var(--danger); margin-top: 24px;">
+          <h3 style="color: var(--danger);">⚠️ Area Reset Fine Manifestazione</h3>
+          <button class="btn" style="background-color: var(--danger);" onclick="window.resetAllData()">Resetta e Cancella Tutti i Dati</button>
+        </div>
+      </div>
+
+      <!-- SCHEDA 4: CLASSIFICA ADMIN -->
+      <div id="tab-rank" class="admin-tab-pane">
+        <div class="card">
+          <h3 style="color: var(--gold); margin-bottom: 10px;">🏆 Classifica in Tempo Reale</h3>
+          <div class="leaderboard-list" id="admin-leaderboard-container"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-nav" id="main-nav" style="display: none;">
+    <div class="nav-item active" onclick="window.showPage('home', this)">🏠 Home</div>
+    <div class="nav-item" id="nav-squad-item" onclick="window.showPage('squad', this)" style="display: none;">🎸 Squadra</div>
+    <div class="nav-item" onclick="window.showPage('leaderboard', this)">🏆 Classifica</div>
+    <div class="nav-item" id="admin-nav-item" style="display: none;" onclick="window.showPage('admin', this)">⚡ Admin</div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBS0Z6OWEpPVjYq0JDjszqRyjjVe6V_6a8",
+      authDomain: "fanta-gus-new.firebaseapp.com",
+      databaseURL: "https://fanta-gus-new-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fanta-gus-new",
+      storageBucket: "fanta-gus-new.firebasestorage.app",
+      messagingSenderId: "1097810685766",
+      appId: "1:1097810685766:web:6aab0144cfff328e437f47"
+    };
+
+    let db = null;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch (e) {
+      console.log("Firebase non inizializzato o offline:", e);
+    }
+
+    const ARTISTS = [
+      { id: 1, name: "Lorenzo Giuliani", cost: 25, points: 0, image: "https://drive.google.com/thumbnail?id=1KG97E1D3qCnLsUc4hnOdrcMD6UXfCr8D&sz=w1000" },
+      { id: 2, name: "Pietro Viconi", cost: 23, points: 0, image: "https://drive.google.com/thumbnail?id=1GnEA0PtvwDGXav9a4mKIczWFWojxzI-d&sz=w1000" },
+      { id: 3, name: "Marco De Francesco", cost: 22, points: 0, image: "https://drive.google.com/thumbnail?id=1dlGm2eANuzzpYvpk3GW4rDEaChEAlTp0&sz=w1000" },
+      { id: 4, name: "Gianluca Greganti", cost: 20, points: 0, image: "https://drive.google.com/thumbnail?id=1XeshL6wGGfjyzDDlcYpDR0L8SZNZ-gn8&sz=w1000" },
+      { id: 5, name: "Alessia Bosi", cost: 19, points: 0, image: "https://drive.google.com/thumbnail?id=1BJ4cwHxabmpoRU9VMAuFUlu2Ev4PZInt&sz=w1000" },
+      { id: 6, name: "Alice Ceccarelli", cost: 18, points: 0, image: "https://drive.google.com/thumbnail?id=1RKu5VPAaiYcdKVxQF2dB5VPVQrjSsjl5&sz=w1000" },
+      { id: 7, name: "Francesco Bontempo", cost: 17, points: 0, image: "https://drive.google.com/thumbnail?id=18PTf28nWqkvPLJgdcHNgKSxhMx2Ki1kv&sz=w1000" },
+      { id: 8, name: "Le GEC", cost: 16, points: 0, image: "https://drive.google.com/thumbnail?id=1GVsqg__GzGk9eQ2Tg0WVeVssmISvpdKf&sz=w1000" },
+      { id: 9, name: "Gli MMMC", cost: 15, points: 0, image: "https://drive.google.com/thumbnail?id=14N3bRXaq8HGFTQf5CBaEMyBDrv1hhB21&sz=w1000" },
+      { id: 10, name: "Marco Ulissi", cost: 14, points: 0, image: "https://drive.google.com/thumbnail?id=1Ewq10gH-t8JY4yXerQQgf2KA-_lw852R&sz=w1000" },
+      { id: 11, name: "Francesco Giorgini", cost: 13, points: 0, image: "https://drive.google.com/thumbnail?id=1tjawAAhqKvAkjFhtksN15OPDS7ipSA_R&sz=w1000" },
+      { id: 12, name: "Maurizio Ceccarelli", cost: 12, points: 0, image: "https://drive.google.com/thumbnail?id=1Er8x_Z65q60oZJ-Vtkr7gzN9HZS2zaE1&sz=w1000" },
+      { id: 13, name: "D&G Damiano e Gabriele", cost: 11, points: 0, image: "https://drive.google.com/thumbnail?id=1MLEampL209ayC9irp6NidFzBJutUSupu&sz=w1000" },
+      { id: 14, name: "Stefano Battistini", cost: 10, points: 0, image: "https://drive.google.com/thumbnail?id=1JPiljl0UsrUhw-67a5f7q6VJ7Q-Krzps&sz=w1000" }
+    ];
+
+    let pointLogs = [];
+    let userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+    let allTeamsCache = {};
+    let previousPage = 'leaderboard';
+
+    function toggleAuthMode(mode) {
+      const boxRegister = document.getElementById('box-register');
+      const boxLogin = document.getElementById('box-login');
+      
+      if (mode === 'login') {
+        if (boxRegister) boxRegister.style.display = 'none';
+        if (boxLogin) boxLogin.style.display = 'block';
+      } else {
+        if (boxLogin) boxLogin.style.display = 'none';
+        if (boxRegister) boxRegister.style.display = 'block';
+      }
+    }
+
+    function unlockAdmin() {
+      const pin = prompt("Inserisci il PIN Admin:");
+      if (pin === "1234") {
+        const adminBtn = document.getElementById('admin-nav-item');
+        if (adminBtn) adminBtn.style.display = 'flex';
+        alert("Modalità Admin Sbloccata!");
+        populateAdminSelect();
+        loadAdminData();
+        showPage('admin', adminBtn);
+      } else if (pin !== null) {
+        alert("PIN errato!");
+      }
+    }
+
+    function adminLogout() {
+      const adminNavItem = document.getElementById('admin-nav-item');
+      if (adminNavItem) adminNavItem.style.display = 'none';
+      if (userState.id) {
+        showPage('home');
+      } else {
+        showPage('auth');
+      }
+      alert("Logout Admin effettuato.");
+    }
+
+    function userLogout() {
+      if (confirm("Vuoi davvero uscire dalla tua squadra?")) {
+        userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
+        const mainNav = document.getElementById('main-nav');
+        const navSquad = document.getElementById('nav-squad-item');
+        const adminNav = document.getElementById('admin-nav-item');
+        if (mainNav) mainNav.style.display = 'none';
+        if (navSquad) navSquad.style.display = 'none';
+        if (adminNav) adminNav.style.display = 'none';
+        toggleAuthMode('register');
+        showPage('auth');
+      }
+    }
+
+    function switchAdminTab(tabId, btnEl) {
+      document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) targetTab.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+
+      if (tabId === 'tab-teams') renderAdminAllTeams();
+      if (tabId === 'tab-rank') renderAdminLeaderboard();
+    }
+
+    function checkAndRegister() {
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const t = document.getElementById('reg-team').value.trim();
+
+      if (!u || !p || !t) {
+        alert("Compila tutti i campi obbligatori!");
+        return;
+      }
+
+      userState.username = u;
+      userState.password = p;
+      userState.teamName = t;
+      userState.selectedIds = [];
+      userState.captainId = null;
+
+      const fileInput = document.getElementById('reg-logo');
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = evt => { 
+          userState.teamLogoUrl = evt.target.result; 
+          proceedToMarket(); 
+        };
+        reader.onerror = () => { 
+          userState.teamLogoUrl = null;
+          proceedToMarket(); 
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        userState.teamLogoUrl = null;
+        proceedToMarket();
+      }
+    }
+
+    function proceedToMarket() {
+      const authPage = document.getElementById('page-auth');
+      const mainNav = document.getElementById('main-nav');
+      const navSquad = document.getElementById('nav-squad-item');
+      if (authPage) authPage.style.display = 'none';
+      if (mainNav) mainNav.style.display = 'flex';
+      if (navSquad) navSquad.style.display = 'flex';
+      renderArtistMarket();
+      showPage('squad');
+    }
+
+    function loginUser() {
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value.trim();
+
+      if (!u || !p) return alert("Inserisci Username e Password!");
+
+      if (!db) {
+        alert("Modalità offline: impossibile connettersi al database.");
+        return;
+      }
+
+      db.ref('teams').once('value').then(snapshot => {
+        const data = snapshot.val();
+        let foundUser = null, foundId = null;
+
+        if (data) {
+          Object.keys(data).forEach(key => {
+            if (data[key].username && data[key].username.toLowerCase() === u.toLowerCase()) {
+              foundUser = data[key];
+              foundId = key;
+            }
+          });
+        }
+
+        if (foundUser) {
+          if (foundUser.password === p) {
+            userState = { id: foundId, ...foundUser };
+            if (!userState.selectedIds) userState.selectedIds = [];
+            
+            document.getElementById('page-auth').style.display = 'none';
+            document.getElementById('main-nav').style.display = 'flex';
+            
+            if (userState.selectedIds.length === 5 && userState.captainId) {
+              document.getElementById('nav-squad-item').style.display = 'none';
+              update
