@@ -100,6 +100,11 @@
 
   <div class="container">
 
+<!-- TIMER COUNTDOWN -->
+      <div class="card" style="text-align: center; border-color: var(--gold); padding: 12px; margin-bottom: 16px;">
+        <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 4px;">⏰ <strong>Inizio spettacolo</strong> e <strong>Chiusura Iscrizioni</strong> tra:</span>
+        <div id="countdown-timer" style="font-size: 1.3rem; font-weight: bold; color: var(--gold);">Caricamento...</div>
+      </div>
     <!-- SCHERMATA LOGIN / REGISTRAZIONE -->
     <div id="page-auth" class="page active">
       <div class="alert-banner">
@@ -1090,6 +1095,36 @@ function checkAndRegister() {
         loadAdminData();
       }
     }
+function avviaCountdown() {
+      // Data e ora di scadenza: Sabato 14 novembre 2026 alle ore 21:00:00
+      const dataScadenza = new Date("2026-11-14T21:00:00").getTime();
+
+      const timerInterval = setInterval(function() {
+        const oraAttuale = new Date().getTime();
+        const distanza = dataScadenza - oraAttuale;
+
+        const elementoTimer = document.getElementById('countdown-timer');
+        if (!elementoTimer) return;
+
+        if (distanza < 0) {
+          clearInterval(timerInterval);
+          elementoTimer.innerText = "🛑 ISCRIZIONI CHIUSE";
+          return;
+        }
+
+        // Calcolo giorni, ore, minuti e secondi
+        const giorni = Math.floor(distanza / (1000 * 60 * 60 * 24));
+        const ore = Math.floor((distanza % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minuti = Math.floor((distanza % (1000 * 60 * 60)) / (1000 * 60));
+        const secondi = Math.floor((distanza % (1000 * 60)) / 1000);
+
+        // Mostra il risultato formattato
+        elementoTimer.innerText = `${giorni}g ${ore}h ${minuti}m ${secondi}s`;
+      }, 1000);
+    }
+
+    // Avvia il countdown appena la pagina è pronta
+    window.addEventListener('DOMContentLoaded', avviaCountdown);
   </script>
 </body>
 </html>
