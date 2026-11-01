@@ -447,7 +447,17 @@
       if (tabId === 'tab-rank') renderAdminLeaderboard();
     }
 
-function checkAndRegister
+function checkAndRegister() {
+      const deadline = new Date("2026-11-01T16:00:00");
+      const oraAttuale = new Date();
+      
+      console.log("Ora attuale:", oraAttuale);
+      console.log("Scadenza:", deadline);
+
+      if (oraAttuale > deadline) {
+        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo: 1 novembre 2026 alle ore 16:00).");
+        return;
+      }
 
       const u = document.getElementById('reg-username').value.trim();
       const p = document.getElementById('reg-password').value.trim();
