@@ -105,7 +105,7 @@
       <div class="alert-banner">
         🔒 <strong>Informativa Privacy e Gioco:</strong><br>
         I dati inseriti in questa applicazione saranno registrati ed utilizzati <strong>esclusivamente ai fini del gioco</strong> e saranno <strong>completamente cancellati</strong> al termine della manifestazione.<br><br>
-        🔑 La tua <strong>Username</strong> e la tua <strong>Password</strong> ti serviranno unicamente per riaccedere all'app e monitorare la tua posizione in classifica durante lo spettacolo. Memorizzale, non sarà possibile recuperarle!
+        🔑 La tua <strong>Username</strong> e la tua <strong>Password</strong> ti serviranno unicamente per riaccedere all'app e monitorare la tua posizione in classifica durante lo spettacolo.
       </div>
 
       <div class="card" id="box-register">
@@ -448,16 +448,15 @@
     }
 
 function checkAndRegister() {
+      // Controllo orario temporaneamente disattivato per test
+      /*
       const deadline = new Date("2026-11-01T16:00:00");
       const oraAttuale = new Date();
-      
-      console.log("Ora attuale:", oraAttuale);
-      console.log("Scadenza:", deadline);
-
       if (oraAttuale > deadline) {
-        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo: 1 novembre 2026 alle ore 16:00).");
+        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse.");
         return;
       }
+      */
 
       const u = document.getElementById('reg-username').value.trim();
       const p = document.getElementById('reg-password').value.trim();
@@ -468,29 +467,6 @@ function checkAndRegister() {
         return;
       }
 
-      userState.username = u;
-      userState.password = p;
-      userState.teamName = t;
-      userState.selectedIds = [];
-      userState.captainId = null;
-
-      const fileInput = document.getElementById('reg-logo');
-      if (fileInput && fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = evt => { 
-          userState.teamLogoUrl = evt.target.result; 
-          proceedToMarket(); 
-        };
-        reader.onerror = () => { 
-          userState.teamLogoUrl = null;
-          proceedToMarket(); 
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        userState.teamLogoUrl = null;
-        proceedToMarket();
-      }
-    }
       userState.username = u;
       userState.password = p;
       userState.teamName = t;
