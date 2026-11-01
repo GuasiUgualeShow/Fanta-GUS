@@ -449,15 +449,15 @@
     }
 
 function checkAndRegister() {
-      // Controllo orario temporaneamente disattivato per test
-      /*
-      const deadline = new Date("2026-11-01T15:00:00");
+      // Imposta la data e l'ora esatta di scadenza (es. oggi alle 16:00 o la nuova scadenza)
+      const deadline = new Date("2026-11-01T16:00:00");
       const oraAttuale = new Date();
+
+      // Se l'orario attuale è superiore alla scadenza, blocca tutto
       if (oraAttuale > deadline) {
-        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse.");
-        return;
+        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo superato).");
+        return; // <-- Questo blocca la registrazione e impedisce di proseguire
       }
-      */
 
       const u = document.getElementById('reg-username').value.trim();
       const p = document.getElementById('reg-password').value.trim();
