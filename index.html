@@ -454,14 +454,12 @@
     }
 
 function checkAndRegister() {
-      // Imposta la data e l'ora esatta di scadenza (es. oggi alle 16:00 o la nuova scadenza)
-      const deadline = new Date("2026-11-01T16:25:00");
+      // Controllo scadenza iscrizioni (aggiornato al 14 novembre 2026 ore 21:00)
+      const deadline = new Date("2026-11-14T21:00:00");
       const oraAttuale = new Date();
-
-      // Se l'orario attuale è superiore alla scadenza, blocca tutto
       if (oraAttuale > deadline) {
-        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo superato).");
-        return; // <-- Questo blocca la registrazione e impedisce di proseguire
+        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo: 14 novembre 2026 alle ore 21:00).");
+        return;
       }
 
       const u = document.getElementById('reg-username').value.trim();
@@ -472,6 +470,52 @@ function checkAndRegister() {
         alert("Compila tutti i campi obbligatori!");
         return;
       }
+
+      if (!db) {
+        processRegistrationData();
+        return;
+      }
+
+      // Controllo duplicati nel database Firebase
+      db.ref('teams').once('value').then(snapshot => {
+        const data = snapshot.val();
+        let teamExists = false;
+        let userExists = false;
+
+        if (data) {
+          Object.keys(data).forEach(key => {
+            const existing = data[key];
+            if (existing.teamName && existing.teamName.toLowerCase() === t.toLowerCase()) {
+              teamExists = true;
+            }
+            if (existing.username && existing.username.toLowerCase() === u.toLowerCase()) {
+              userExists = true;
+            }
+          });
+        }
+
+        if (teamExists) {
+          alert("⚠️ Nome squadra già registrato, usa un nome diverso.");
+          return;
+        }
+
+        if (userExists) {
+          alert("⚠️ Username già in uso, scegline un'altra.");
+          return;
+        }
+
+        // Se tutto è libero, procedi
+        processRegistrationData();
+      }).catch(err => {
+        console.error(err);
+        alert("Errore di connessione durante la verifica. Riprova.");
+      });
+    }
+
+    function processRegistrationData() {
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const t = document.getElementById('reg-team').value.trim();
 
       userState.username = u;
       userState.password = p;
