@@ -46,18 +46,18 @@
     .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
     .btn-danger-icon { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: var(--danger); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; }
 
-    /* Admin Tabs Styling */
-    .admin-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #0f172a; padding: 4px; border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
-    .admin-tab-btn { flex: 1; padding: 8px 10px; font-size: 0.78rem; font-weight: bold; background: transparent; border: none; color: var(--text-muted); border-radius: 6px; cursor: pointer; text-align: center; white-space: nowrap; transition: 0.2s; }
-    .admin-tab-btn.active { background: var(--accent); color: white; }
-    .admin-tab-pane { display: none; }
-    .admin-tab-pane.active { display: block; }
+    /* Tabs Styling (User & Admin) */
+    .custom-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #0f172a; padding: 4px; border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
+    .tab-btn { flex: 1; padding: 10px 8px; font-size: 0.8rem; font-weight: bold; background: transparent; border: none; color: var(--text-muted); border-radius: 6px; cursor: pointer; text-align: center; white-space: nowrap; transition: 0.2s; }
+    .tab-btn.active { background: var(--gold); color: #000; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
 
     .alert-banner { background: rgba(139, 92, 246, 0.15); border: 1px solid var(--accent); color: var(--text); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4; }
     .disclaimer-text { text-align: center; color: var(--text-muted); font-size: 0.78rem; margin-top: 16px; font-style: italic; line-height: 1.3; }
 
     .artist-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    .artist-card { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 8px; }
+    .artist-card { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 8px; transition: background 0.3s ease; }
     .artist-card-top { display: flex; align-items: center; justify-content: space-between; }
     .artist-info { display: flex; align-items: center; gap: 12px; }
     
@@ -100,17 +100,20 @@
 
   <div class="container">
 
-<!-- TIMER COUNTDOWN -->
-      <div class="card" style="text-align: center; border-color: var(--gold); padding: 12px; margin-bottom: 16px;">
-        <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 4px;">⏰ <strong>Inizio spettacolo</strong> e <strong>Chiusura Iscrizioni</strong> tra:</span>
-        <div id="countdown-timer" style="font-size: 1.3rem; font-weight: bold; color: var(--gold);">Caricamento...</div>
-      </div>
+    <!-- TIMER COUNTDOWN -->
+    <div class="card" style="text-align: center; border-color: var(--gold); padding: 12px; margin-bottom: 16px;">
+      <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 4px;">⏰ <strong>Inizio spettacolo</strong> e <strong>Chiusura Iscrizioni</strong> tra:</span>
+      <div id="countdown-timer" style="font-size: 1.3rem; font-weight: bold; color: var(--gold);">Caricamento...</div>
+    </div>
+
     <!-- SCHERMATA LOGIN / REGISTRAZIONE -->
     <div id="page-auth" class="page active">
       <div class="alert-banner">
         🔒 <strong>Informativa Privacy e Gioco:</strong><br>
         I dati inseriti in questa applicazione saranno registrati ed utilizzati <strong>esclusivamente ai fini del gioco</strong> e saranno <strong>completamente cancellati</strong> al termine della manifestazione.<br><br>
-        🔑 La tua <strong>Username</strong> e la tua <strong>Password</strong> ti serviranno unicamente per riaccedere all'app e monitorare la tua posizione in classifica durante lo spettacolo. Memorizzale, non sarà possibile recuperare i dati di accesso!<br><br>
+        🔑 La tua <strong>Username</strong> e la tua <strong>Password</strong> ti serviranno unicamente per riaccedere all'app e monitorare la tua posizione in classifica durante lo spettacolo. <br><br>
+	⚠️ <strong>Memorizza la username e la password! <br>
+	⛔ Non sarà possibile recuperare i dati di accesso! ⛔ </strong><br><br>
         ⏰ <strong>SCADENZA ISCRIZIONI SABATO 14 NOVEMBRE 2026, ORE 21.00</strong><br><br>
       </div>
 
@@ -137,7 +140,6 @@
         
         <button class="btn" onclick="checkAndRegister()">Registra e Scegli la Rosa</button>
         
-        <!-- Pulsante Accedi in evidenza -->
         <div style="margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 12px; text-align: center;">
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Hai già creato la tua squadra?</p>
           <button class="btn btn-highlight" onclick="toggleAuthMode('login')">🔑 Accedi alla tua Squadra</button>
@@ -219,19 +221,6 @@
 
       <h3 style="margin-bottom: 10px;">La tua Rosa (Definitiva)</h3>
       <div class="artist-grid" id="my-team-list"></div>
-
-      <div class="card" style="margin-top: 24px; border-color: var(--border);">
-        <h3 style="margin-bottom: 10px;">📋 Guida Punteggi Bonus/Malus</h3>
-        <ul class="rules-list">
-          <li><span>👏 Standing ovation</span><strong style="color:var(--success);">+10 pt</strong></li>
-          <li><span>👔 Outfit stravagante</span><strong style="color:var(--success);">+5 pt</strong></li>
-          <li><span>✋ Batte il cinque col presentatore</span><strong style="color:var(--success);">+5 pt</strong></li>
-          <li><span>🥉 Podio / 🏆 Vittoria</span><strong style="color:var(--success);">+5 pt</strong></li>
-          <li><span>👋 Saluta il pubblico</span><strong style="color:var(--success);">+5 pt</strong></li>
-          <li><span>📝 Errore testo / 🎶 Stecca</span><strong style="color:var(--danger);">-5 pt</strong></li>
-          <li><span>🤸 Caduta / 🎙️ Problema Microfono</span><strong style="color:var(--danger);">-5 pt</strong></li>
-        </ul>
-      </div>
     </div>
 
     <!-- SCHERMATA DETTAGLIO SQUADRA ALTRUI (ISPEZIONE) -->
@@ -251,16 +240,40 @@
       <div class="artist-grid" id="view-team-artists"></div>
     </div>
 
-    <!-- SCHERMATA CLASSIFICA -->
+    <!-- SCHERMATA CLASSIFICHE (CON 3 SCHEDE SEPARATE) -->
     <div id="page-leaderboard" class="page">
-      <div class="card">
-        <h3>🏆 Classifica Generale</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Clicca sul nome di una squadra per visualizzare la sua rosa di artisti.</p>
-        <div class="leaderboard-list" id="leaderboard-container"></div>
+      <div class="custom-tabs">
+        <button class="tab-btn active" onclick="switchUserRankTab('rank-tot', this)">👑 Totale</button>
+        <button class="tab-btn" onclick="switchUserRankTab('rank-s1', this)">📅 Sabato</button>
+        <button class="tab-btn" onclick="switchUserRankTab('rank-s2', this)">📅 Domenica</button>
+      </div>
+
+      <!-- SCHEDA TOTALE -->
+      <div id="rank-tot" class="tab-pane active">
+        <div class="card" style="border-color: var(--gold); background: rgba(245, 158, 11, 0.05);">
+          <h3 style="color: var(--gold);">👑 Classifica Totale Generale</h3>
+          <div id="classifica-totale" style="margin-top: 10px;">Caricamento classifica...</div>
+        </div>
+      </div>
+
+      <!-- SCHEDA SABATO -->
+      <div id="rank-s1" class="tab-pane">
+        <div class="card" style="border-color: var(--gold);">
+          <h3 style="color: var(--gold);">🏆 Classifica Sabato</h3>
+          <div id="classifica-serata1" style="margin-top: 10px;">Caricamento classifica...</div>
+        </div>
+      </div>
+
+      <!-- SCHEDA DOMENICA -->
+      <div id="rank-s2" class="tab-pane">
+        <div class="card" style="border-color: var(--gold);">
+          <h3 style="color: var(--gold);">🏆 Classifica Domenica</h3>
+          <div id="classifica-serata2" style="margin-top: 10px;">Caricamento classifica...</div>
+        </div>
       </div>
     </div>
 
-    <!-- SCHERMATA ADMIN CON LE 4 SCHEDE -->
+    <!-- SCHERMATA ADMIN -->
     <div id="page-admin" class="page">
       <div class="card" style="display: flex; justify-content: space-between; align-items: center; border-color: var(--gold);">
         <div>
@@ -270,40 +283,42 @@
         <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="adminLogout()">🔒 Logout</button>
       </div>
 
-      <!-- Menu delle Schede Admin -->
-      <div class="admin-tabs">
-        <button class="admin-tab-btn active" onclick="switchAdminTab('tab-users', this)">👥 Iscritti</button>
-        <button class="admin-tab-btn" onclick="switchAdminTab('tab-teams', this)">🎸 Squadre & Rosa</button>
-        <button class="admin-tab-btn" onclick="switchAdminTab('tab-points', this)">⚡ Gestione Punti</button>
-        <button class="admin-tab-btn" onclick="switchAdminTab('tab-rank', this)">🏆 Classifica</button>
+      <div class="custom-tabs">
+        <button class="tab-btn active" onclick="switchAdminTab('tab-users', this)">👥 Iscritti</button>
+        <button class="tab-btn" onclick="switchAdminTab('tab-teams', this)">🎸 Squadre & Rosa</button>
+        <button class="tab-btn" onclick="switchAdminTab('tab-points', this)">⚡ Gestione Punti</button>
+        <button class="tab-btn" onclick="switchAdminTab('tab-rank', this)">🏆 Classifiche</button>
       </div>
 
-      <!-- SCHEDA 1: ISCRITTI -->
-      <div id="tab-users" class="admin-tab-pane active">
+      <div id="tab-users" class="tab-pane active">
         <div class="card" style="border-color: var(--gold);">
           <h3 style="color: var(--gold); margin-bottom: 10px;">Elenco Iscritti (<span id="total-users-count">0</span>)</h3>
           <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
       </div>
 
-      <!-- SCHEDA 2: TUTTE LE SQUADRE -->
-      <div id="tab-teams" class="admin-tab-pane">
+      <div id="tab-teams" class="tab-pane">
         <div class="card">
           <h3 style="color: var(--gold); margin-bottom: 10px;">Tutte le Squadre & Roster</h3>
           <div id="admin-all-teams-container" style="display: flex; flex-direction: column; gap: 16px;"></div>
         </div>
       </div>
 
-      <!-- SCHEDA 3: ASSEGNAZIONE BONUS E MALUS -->
-      <div id="tab-points" class="admin-tab-pane">
-        <div class="card">
-          <h3>⚡ Assegna Bonus o Malus</h3>
+      <div id="tab-points" class="tab-pane">
+        <div class="card" style="border-color: var(--gold);">
+          <h3 style="color: var(--gold); margin-bottom: 12px;">🎛️ Assegna Bonus/Malus per Giornata</h3>
+          
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button id="btn-serata-1" onclick="cambiaSerataAdmin('serata1')" style="flex: 1; padding: 12px; background: var(--gold); color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">📅 Sabato</button>
+            <button id="btn-serata-2" onclick="cambiaSerataAdmin('serata2')" style="flex: 1; padding: 12px; background: #333; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">📅 Domenica</button>
+          </div>
+
           <div class="form-group">
             <label>Seleziona Artista</label>
             <select id="admin-artist-select"></select>
           </div>
           <div class="form-group">
-            <label>Bonus / Malus</label>
+            <label>Bonus / Malus da Assegnare</label>
             <select id="admin-points-select">
               <option value="10">👏 Standing ovation del pubblico (+10)</option>
               <option value="5">👔 Outfit stravagante (+5)</option>
@@ -317,10 +332,10 @@
               <option value="-5">🎙️ Non funziona il microfono (-5)</option>
             </select>
           </div>
-          <button class="btn" onclick="applyAdminPoints()">Conferma e Assegna Punti</button>
+          <button class="btn" onclick="applyAdminPoints()">Conferma e Assegna Bonus</button>
         </div>
 
-        <h3 style="margin: 16px 0 10px 0;">📋 Riepilogo Artisti & Eventi</h3>
+        <h3 style="margin: 16px 0 10px 0;">📋 Storico Bonus/Malus per Artista</h3>
         <div id="admin-artist-boxes"></div>
 
         <div class="card" style="border-color: var(--danger); margin-top: 24px;">
@@ -329,14 +344,12 @@
         </div>
       </div>
 
-      <!-- SCHEDA 4: CLASSIFICA ADMIN -->
-      <div id="tab-rank" class="admin-tab-pane">
+      <div id="tab-rank" class="tab-pane">
         <div class="card">
-          <h3 style="color: var(--gold); margin-bottom: 10px;">🏆 Classifica in Tempo Reale</h3>
-          <div class="leaderboard-list" id="admin-leaderboard-container"></div>
+          <h3 style="color: var(--gold); margin-bottom: 10px;">🏆 Classifiche in Tempo Reale</h3>
+          <div id="admin-leaderboard-container"></div>
         </div>
       </div>
-
     </div>
 
   </div>
@@ -344,11 +357,11 @@
   <div class="bottom-nav" id="main-nav" style="display: none;">
     <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
     <div class="nav-item" id="nav-squad-item" onclick="showPage('squad', this)" style="display: none;">🎸 Squadra</div>
-    <div class="nav-item" onclick="showPage('leaderboard', this)">🏆 Classifica</div>
+    <div class="nav-item" onclick="showPage('leaderboard', this)">🏆 Classifiche</div>
     <div class="nav-item" id="admin-nav-item" style="display: none;" onclick="showPage('admin', this)">⚡ Admin</div>
   </div>
 
-  <!-- SCRIPT IN FONDO: CARICATO CORRETTAMENTE DOPO L'HTML -->
+  <!-- SCRIPT -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBS0Z6OWEpPVjYq0JDjszqRyjjVe6V_6a8",
@@ -362,33 +375,35 @@
 
     let db = null;
     try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.database();
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+      }
     } catch (e) {
-      console.log("Firebase non inizializzato o offline:", e);
+      console.log("Firebase non inizializzato:", e);
     }
 
     const ARTISTS = [
-      { id: 1, name: "Lorenzo Giuliani", cost: 25, points: 0, image: "https://drive.google.com/thumbnail?id=17YenmIcxkfeYyH856NN1mHCaszUw-rzJ&sz=w1000" },
-      { id: 2, name: "Pietro Viconi", cost: 23, points: 0, image: "https://drive.google.com/thumbnail?id=1Coi60YZuCvVAJ56YADcDIMNVRgMhG5V7&sz=w1000" },
-      { id: 3, name: "Marco De Francesco", cost: 22, points: 0, image: "https://drive.google.com/thumbnail?id=1oA9Rzcee5VyFJtVWTl3X_utIQsxgAz0y&sz=w1000" },
-      { id: 4, name: "Gianluca Greganti", cost: 20, points: 0, image: "https://drive.google.com/thumbnail?id=1R_W64bCLEakpCOvngKaN_OtXnRqYOSB-&sz=w1000" },
-      { id: 5, name: "Alessia Bosi", cost: 19, points: 0, image: "https://drive.google.com/thumbnail?id=1e3K4k0qdgV2s_sJsUWjqP8CG0G21JdZP&sz=w1000" },
-      { id: 6, name: "Alice Ceccarelli", cost: 18, points: 0, image: "https://drive.google.com/thumbnail?id=1sr2U37HUO8UKqfv5TEyO--pV_1Y66qih&sz=w1000" },
-      { id: 7, name: "Francesco Bontempo", cost: 17, points: 0, image: "https://drive.google.com/thumbnail?id=1QTz3Hi0FKQi4ZYFp6JUVoTHGSuSymlmg&sz=w1000" },
-      { id: 8, name: "Le GEC", cost: 16, points: 0, image: "https://drive.google.com/thumbnail?id=1khYyUe9uqC5mGsWR0dQ3hPtn3wV-y6Q5&sz=w1000" },
-      { id: 9, name: "Gli MMMC", cost: 15, points: 0, image: "https://drive.google.com/thumbnail?id=1W3GSXRBI7blsAWRr9ydg37KA456rT0kk&sz=w1000" },
-      { id: 10, name: "Marco Ulissi", cost: 14, points: 0, image: "https://drive.google.com/thumbnail?id=1m4ig-8SLTn-YQfC9WBPaq226dd6WG8nU&sz=w1000" },
-      { id: 11, name: "Francesco Giorgini", cost: 13, points: 0, image: "https://drive.google.com/thumbnail?id=15qMNuc2qy-2GD9V-kEVnko-E7gxryxn3&sz=w1000" },
-      { id: 12, name: "Maurizio Ceccarelli", cost: 12, points: 0, image: "https://drive.google.com/thumbnail?id=1el4X-gFeFKZbaXqj9vVIovkQrysN5Qiy&sz=w1000" },
-      { id: 13, name: "D&G Damiano e Gabriele", cost: 11, points: 0, image: "https://drive.google.com/thumbnail?id=1O19V3H9ypyHhUV92GvPOkjHlwGloR1xK&sz=w1000" },
-      { id: 14, name: "Stefano Battistini", cost: 10, points: 0, image: "https://drive.google.com/thumbnail?id=1Raq15MC8wCiQthCzvxYf7ljx6_MYArrS&sz=w1000" }
+      { id: 1, name: "Lorenzo Giuliani", cost: 25, image: "https://drive.google.com/thumbnail?id=17YenmIcxkfeYyH856NN1mHCaszUw-rzJ&sz=w1000" },
+      { id: 2, name: "Pietro Viconi", cost: 23, image: "https://drive.google.com/thumbnail?id=1Coi60YZuCvVAJ56YADcDIMNVRgMhG5V7&sz=w1000" },
+      { id: 3, name: "Marco De Francesco", cost: 22, image: "https://drive.google.com/thumbnail?id=1oA9Rzcee5VyFJtVWTl3X_utIQsxgAz0y&sz=w1000" },
+      { id: 4, name: "Gianluca Greganti", cost: 20, image: "https://drive.google.com/thumbnail?id=1R_W64bCLEakpCOvngKaN_OtXnRqYOSB-&sz=w1000" },
+      { id: 5, name: "Alessia Bosi", cost: 19, image: "https://drive.google.com/thumbnail?id=1e3K4k0qdgV2s_sJsUWjqP8CG0G21JdZP&sz=w1000" },
+      { id: 6, name: "Alice Ceccarelli", cost: 18, image: "https://drive.google.com/thumbnail?id=1sr2U37HUO8UKqfv5TEyO--pV_1Y66qih&sz=w1000" },
+      { id: 7, name: "Francesco Bontempo", cost: 17, image: "https://drive.google.com/thumbnail?id=1QTz3Hi0FKQi4ZYFp6JUVoTHGSuSymlmg&sz=w1000" },
+      { id: 8, name: "Le GEC", cost: 16, image: "https://drive.google.com/thumbnail?id=1khYyUe9uqC5mGsWR0dQ3hPtn3wV-y6Q5&sz=w1000" },
+      { id: 9, name: "Gli MMMC", cost: 15, image: "https://drive.google.com/thumbnail?id=1W3GSXRBI7blsAWRr9ydg37KA456rT0kk&sz=w1000" },
+      { id: 10, name: "Marco Ulissi", cost: 14, image: "https://drive.google.com/thumbnail?id=1m4ig-8SLTn-YQfC9WBPaq226dd6WG8nU&sz=w1000" },
+      { id: 11, name: "Francesco Giorgini", cost: 13, image: "https://drive.google.com/thumbnail?id=15qMNuc2qy-2GD9V-kEVnko-E7gxryxn3&sz=w1000" },
+      { id: 12, name: "Maurizio Ceccarelli", cost: 12, image: "https://drive.google.com/thumbnail?id=1el4X-gFeFKZbaXqj9vVIovkQrysN5Qiy&sz=w1000" },
+      { id: 13, name: "D&G Damiano e Gabriele", cost: 11, image: "https://drive.google.com/thumbnail?id=1O19V3H9ypyHhUV92GvPOkjHlwGloR1xK&sz=w1000" },
+      { id: 14, name: "Stefano Battistini", cost: 10, image: "https://drive.google.com/thumbnail?id=1Raq15MC8wCiQthCzvxYf7ljx6_MYArrS&sz=w1000" }
     ];
 
-    let pointLogs = [];
     let userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
     let allTeamsCache = {};
     let previousPage = 'leaderboard';
+    let serataAttivaAdmin = 'serata1';
 
     function toggleAuthMode(mode) {
       const boxRegister = document.getElementById('box-register');
@@ -408,8 +423,8 @@
         const adminBtn = document.getElementById('admin-nav-item');
         if (adminBtn) adminBtn.style.display = 'flex';
         alert("Modalità Admin Sbloccata!");
-        populateAdminSelect();
         loadAdminData();
+        populateAdminSelect();
         showPage('admin', adminBtn);
       } else if (pin !== null) {
         alert("PIN errato!");
@@ -441,9 +456,19 @@
       }
     }
 
+    // GESTIONE SCHEDE UTENTE E ADMIN
+    function switchUserRankTab(tabId, btnEl) {
+      document.querySelectorAll('#page-leaderboard .tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#page-leaderboard .tab-btn').forEach(b => b.classList.remove('active'));
+      
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) targetTab.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+    }
+
     function switchAdminTab(tabId, btnEl) {
-      document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#page-admin .tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#page-admin .tab-btn').forEach(b => b.classList.remove('active'));
       
       const targetTab = document.getElementById(tabId);
       if (targetTab) targetTab.classList.add('active');
@@ -451,14 +476,14 @@
 
       if (tabId === 'tab-teams') renderAdminAllTeams();
       if (tabId === 'tab-rank') renderAdminLeaderboard();
+      if (tabId === 'tab-points') populateAdminSelect();
     }
 
-function checkAndRegister() {
-      // Controllo scadenza iscrizioni (aggiornato al 14 novembre 2026 ore 21:00)
+    function checkAndRegister() {
       const deadline = new Date("2026-11-14T21:00:00");
       const oraAttuale = new Date();
       if (oraAttuale > deadline) {
-        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse (termine ultimo: 14 novembre 2026 alle ore 21:00).");
+        alert("⚠️ Le iscrizioni al FANTA GUS sono chiuse.");
         return;
       }
 
@@ -476,7 +501,6 @@ function checkAndRegister() {
         return;
       }
 
-      // Controllo duplicati nel database Firebase
       db.ref('teams').once('value').then(snapshot => {
         const data = snapshot.val();
         let teamExists = false;
@@ -485,31 +509,16 @@ function checkAndRegister() {
         if (data) {
           Object.keys(data).forEach(key => {
             const existing = data[key];
-            if (existing.teamName && existing.teamName.toLowerCase() === t.toLowerCase()) {
-              teamExists = true;
-            }
-            if (existing.username && existing.username.toLowerCase() === u.toLowerCase()) {
-              userExists = true;
-            }
+            if (existing.teamName && existing.teamName.toLowerCase() === t.toLowerCase()) teamExists = true;
+            if (existing.username && existing.username.toLowerCase() === u.toLowerCase()) userExists = true;
           });
         }
 
-        if (teamExists) {
-          alert("⚠️ Nome squadra già registrato, usa un nome diverso.");
-          return;
-        }
+        if (teamExists) { alert("⚠️ Nome squadra già registrato."); return; }
+        if (userExists) { alert("⚠️ Username già in uso."); return; }
 
-        if (userExists) {
-          alert("⚠️ Username già in uso, scegline un'altra.");
-          return;
-        }
-
-        // Se tutto è libero, procedi
         processRegistrationData();
-      }).catch(err => {
-        console.error(err);
-        alert("Errore di connessione durante la verifica. Riprova.");
-      });
+      }).catch(() => processRegistrationData());
     }
 
     function processRegistrationData() {
@@ -526,14 +535,8 @@ function checkAndRegister() {
       const fileInput = document.getElementById('reg-logo');
       if (fileInput && fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
-        reader.onload = evt => { 
-          userState.teamLogoUrl = evt.target.result; 
-          proceedToMarket(); 
-        };
-        reader.onerror = () => { 
-          userState.teamLogoUrl = null;
-          proceedToMarket(); 
-        };
+        reader.onload = evt => { userState.teamLogoUrl = evt.target.result; proceedToMarket(); };
+        reader.onerror = () => { userState.teamLogoUrl = null; proceedToMarket(); };
         reader.readAsDataURL(fileInput.files[0]);
       } else {
         userState.teamLogoUrl = null;
@@ -542,12 +545,9 @@ function checkAndRegister() {
     }
 
     function proceedToMarket() {
-      const authPage = document.getElementById('page-auth');
-      const mainNav = document.getElementById('main-nav');
-      const navSquad = document.getElementById('nav-squad-item');
-      if (authPage) authPage.style.display = 'none';
-      if (mainNav) mainNav.style.display = 'flex';
-      if (navSquad) navSquad.style.display = 'flex';
+      document.getElementById('page-auth').style.display = 'none';
+      document.getElementById('main-nav').style.display = 'flex';
+      document.getElementById('nav-squad-item').style.display = 'flex';
       renderArtistMarket();
       showPage('squad');
     }
@@ -557,11 +557,7 @@ function checkAndRegister() {
       const p = document.getElementById('login-password').value.trim();
 
       if (!u || !p) return alert("Inserisci Username e Password!");
-
-      if (!db) {
-        alert("Modalità offline: impossibile connettersi al database.");
-        return;
-      }
+      if (!db) return alert("Database offline.");
 
       db.ref('teams').once('value').then(snapshot => {
         const data = snapshot.val();
@@ -597,10 +593,8 @@ function checkAndRegister() {
             alert("Password errata!");
           }
         } else {
-          alert("Nessuna squadra trovata con questa Username.");
+          alert("Nessuna squadra trovata.");
         }
-      }).catch(err => {
-        alert("Errore di connessione. Riprova.");
       });
     }
 
@@ -644,10 +638,10 @@ function checkAndRegister() {
         userState.selectedIds.splice(idx, 1);
         if (userState.captainId === id) userState.captainId = null;
       } else {
-        if (userState.selectedIds.length >= 5) return alert("Puoi scegliere massimo 5 artisti!");
+        if (userState.selectedIds.length >= 5) return alert("Massimo 5 artisti!");
         const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
         const artCost = ARTISTS.find(a => a.id === id).cost;
-        if (currentCost + artCost > 100) return alert("Supereresti il budget di 100 Gastoni!");
+        if (currentCost + artCost > 100) return alert("Supereresti i 100 Gastoni!");
         userState.selectedIds.push(id);
       }
       renderArtistMarket();
@@ -680,10 +674,7 @@ function checkAndRegister() {
 
         const div = document.createElement('div');
         div.className = `captain-picker-item ${isCap ? 'selected' : ''}`;
-        div.onclick = () => {
-          userState.captainId = id;
-          renderCaptainPicker();
-        };
+        div.onclick = () => { userState.captainId = id; renderCaptainPicker(); };
 
         div.innerHTML = `
           <div><strong>${art.name}</strong></div>
@@ -696,11 +687,11 @@ function checkAndRegister() {
     }
 
     function saveSquad() {
-      if (userState.selectedIds.length !== 5) return alert("Devi selezionare esattamente 5 artisti!");
-      if (!userState.captainId) return alert("Devi scegliere un Capitano!");
+      if (userState.selectedIds.length !== 5) return alert("Scegli 5 artisti!");
+      if (!userState.captainId) return alert("Scegli un Capitano!");
 
       if (!db) {
-        alert("Salvataggio simulato in locale (offline).");
+        alert("Salvato in locale.");
         document.getElementById('nav-squad-item').style.display = 'none';
         updateDashboard();
         showPage('home');
@@ -708,8 +699,7 @@ function checkAndRegister() {
       }
 
       if (!userState.id) {
-        const userRef = db.ref('teams').push();
-        userState.id = userRef.key;
+        userState.id = db.ref('teams').push().key;
       }
 
       db.ref('teams/' + userState.id).set({
@@ -720,24 +710,163 @@ function checkAndRegister() {
         selectedIds: userState.selectedIds,
         captainId: userState.captainId
       }).then(() => {
-        alert("Squadra salvata con successo! La rosa è definitiva.");
+        alert("Squadra salvata con successo!");
         document.getElementById('nav-squad-item').style.display = 'none';
         updateDashboard();
         showPage('home');
       });
     }
 
-    function calculatePoints(team) {
-      let total = 0;
-      if (!team.selectedIds) return 0;
-      team.selectedIds.forEach(id => {
-        const art = ARTISTS.find(a => a.id === id);
-        if (art) {
-          const isCap = id === team.captainId;
-          total += isCap ? art.points * 2 : art.points;
-        }
+    // GESTIONE ADMIN PUNTI (SABATO / DOMENICA)
+    function cambiaSerataAdmin(serata) {
+      serataAttivaAdmin = serata;
+      const btn1 = document.getElementById('btn-serata-1');
+      const btn2 = document.getElementById('btn-serata-2');
+      if (!btn1 || !btn2) return;
+
+      if (serata === 'serata1') {
+        btn1.style.background = 'var(--gold)'; btn1.style.color = '#000';
+        btn2.style.background = '#333'; btn2.style.color = '#fff';
+      } else {
+        btn1.style.background = '#333'; btn1.style.color = '#fff';
+        btn2.style.background = 'var(--gold)'; btn2.style.color = '#000';
+      }
+      renderAdminBoxes();
+    }
+
+    function populateAdminSelect() {
+      const sel = document.getElementById('admin-artist-select');
+      if (!sel) return;
+      sel.innerHTML = "";
+      let sortedArtists = [...ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
+      sortedArtists.forEach(art => {
+        sel.innerHTML += `<option value="${art.id}">${art.name}</option>`;
       });
-      return total;
+      renderAdminBoxes();
+    }
+
+    function applyAdminPoints() {
+      const artId = parseInt(document.getElementById('admin-artist-select').value);
+      const selectEl = document.getElementById('admin-points-select');
+      const pts = parseInt(selectEl.value);
+      const label = selectEl.options[selectEl.selectedIndex].text;
+
+      if (!db) return;
+
+      const logId = Date.now();
+      db.ref(`pointLogs/${serataAttivaAdmin}/${logId}`).set({
+        id: logId,
+        artistId: artId,
+        points: pts,
+        label: label,
+        serata: serataAttivaAdmin
+      }).then(() => {
+        alert("Bonus/Malus assegnato con successo!");
+        ricalcolaEAggiornaTutto();
+      });
+    }
+
+    function removeAdminPoint(logId, serata) {
+      if (db && confirm("Vuoi rimuovere questo bonus/malus?")) {
+        db.ref(`pointLogs/${serata}/${logId}`).remove().then(() => {
+          ricalcolaEAggiornaTutto();
+        });
+      }
+    }
+
+    function ricalcolaEAggiornaTutto() {
+      if (!db) return;
+
+      Promise.all([
+        db.ref('pointLogs').once('value'),
+        db.ref('teams').once('value')
+      ]).then(([snapshotLogs, snapshotTeams]) => {
+        const logsData = snapshotLogs.val() || { serata1: {}, serata2: {} };
+        const teamsData = snapshotTeams.val() || {};
+
+        const artistiPunti = {};
+        ARTISTS.forEach(a => artistiPunti[a.id] = { serata1: 0, serata2: 0 });
+
+        const logs1 = logsData.serata1 ? Object.values(logsData.serata1) : [];
+        logs1.forEach(l => {
+          if (artistiPunti[l.artistId]) artistiPunti[l.artistId].serata1 += Number(l.points) || 0;
+        });
+
+        const logs2 = logsData.serata2 ? Object.values(logsData.serata2) : [];
+        logs2.forEach(l => {
+          if (artistiPunti[l.artistId]) artistiPunti[l.artistId].serata2 += Number(l.points) || 0;
+        });
+
+        db.ref('artisti').set(artistiPunti);
+
+        const aggiornamentiTeams = {};
+        Object.keys(teamsData).forEach(teamKey => {
+          const squadra = teamsData[teamKey];
+          const formazione = squadra.selectedIds || [];
+          const idCapitano = squadra.captainId || null;
+
+          let p1 = 0, p2 = 0;
+          formazione.forEach(artId => {
+            const artData = artistiPunti[artId] || { serata1: 0, serata2: 0 };
+            let artP1 = artData.serata1;
+            let artP2 = artData.serata2;
+
+            if (artId === idCapitano) {
+              artP1 *= 2;
+              artP2 *= 2;
+            }
+            p1 += artP1;
+            p2 += artP2;
+          });
+
+          aggiornamentiTeams[`${teamKey}/puntiSerata1`] = p1;
+          aggiornamentiTeams[`${teamKey}/puntiSerata2`] = p2;
+          aggiornamentiTeams[`${teamKey}/puntiTotale`] = p1 + p2;
+        });
+
+        db.ref('teams').update(aggiornamentiTeams);
+        renderAdminBoxes();
+      });
+    }
+
+    function renderAdminBoxes() {
+      const container = document.getElementById('admin-artist-boxes');
+      if (!container || !db) return;
+
+      db.ref(`pointLogs/${serataAttivaAdmin}`).once('value').then(snapshot => {
+        const logsData = snapshot.val() || {};
+        const currentLogs = Object.values(logsData);
+        container.innerHTML = "";
+
+        let sortedArtists = [...ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
+        const nomeGiornoLabel = (serataAttivaAdmin === 'serata1') ? 'Sabato' : 'Domenica';
+
+        sortedArtists.forEach(art => {
+          const artLogs = currentLogs.filter(l => l.artistId === art.id);
+          const totaleArtistaSerata = artLogs.reduce((sum, l) => sum + Number(l.points), 0);
+
+          const box = document.createElement('div');
+          box.className = "admin-artist-box";
+          
+          let logsHtml = (artLogs.length === 0) 
+            ? `<div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nessun bonus/malus in questa giornata</div>`
+            : artLogs.map(log => `
+                <div class="admin-log-entry">
+                  <span>${log.label}</span>
+                  <button class="btn-danger-icon" onclick="removeAdminPoint(${log.id}, '${serataAttivaAdmin}')">❌</button>
+                </div>
+              `).join('');
+
+          box.innerHTML = `
+            <div class="admin-artist-header">
+              <strong>${art.name}</strong>
+              <span style="font-size:1.1rem; font-weight:bold; color:var(--gold);">${totaleArtistaSerata > 0 ? '+' : ''}${totaleArtistaSerata} pt (${nomeGiornoLabel})</span>
+            </div>
+            <div>${logsHtml}</div>
+          `;
+          container.appendChild(box);
+        });
+      });
     }
 
     function renderTeamArtistsList(team, containerId) {
@@ -747,74 +876,68 @@ function checkAndRegister() {
 
       if (!team.selectedIds) return;
 
-      team.selectedIds.forEach(id => {
-        const art = ARTISTS.find(a => a.id === id);
-        if (art) {
-          const isCap = id === team.captainId;
-          const basePts = art.points;
-          const finalPts = isCap ? basePts * 2 : basePts;
+      db.ref('artisti').once('value').then(snapshot => {
+        const artistiData = snapshot.val() || {};
 
-          const artistLogs = pointLogs.filter(l => l.artistId === art.id);
-          let logsHtml = "";
-          if (artistLogs.length > 0) {
-            logsHtml = `<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); display:flex; flex-direction:column; gap:4px;">` +
-              artistLogs.map(log => `
-                <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
-                  <span>• ${log.label}</span>
-                  <strong style="color:${log.points > 0 ? 'var(--success)' : 'var(--danger)'};">${log.points > 0 ? '+' : ''}${log.points} pt</strong>
+        team.selectedIds.forEach(id => {
+          const art = ARTISTS.find(a => a.id === id);
+          if (art) {
+            const isCap = id === team.captainId;
+            const datiArt = artistiData[id] || { serata1: 0, serata2: 0 };
+            let p1 = Number(datiArt.serata1) || 0;
+            let p2 = Number(datiArt.serata2) || 0;
+            if (isCap) { p1 *= 2; p2 *= 2; }
+            const totalArtistPts = p1 + p2;
+
+            const avatarHtml = (art.image && art.image.trim() !== "") 
+              ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
+              : `<div class="avatar">${art.name.charAt(0)}</div>`;
+
+            const card = document.createElement('div');
+            card.className = "artist-card";
+            card.innerHTML = `
+              <div class="artist-card-top">
+                <div class="artist-info">
+                  ${avatarHtml}
+                  <div>
+                    <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}<br>
+                    <span style="font-size:0.8rem; color:var(--text-muted)">Sabato: ${p1} pt | Domenica: ${p2} pt</span>
+                  </div>
                 </div>
-              `).join('') + `</div>`;
-          } else {
-            logsHtml = `<div style="font-size:0.78rem; color:var(--text-muted); font-style:italic; margin-top:4px;">Nessun bonus/malus assegnato</div>`;
-          }
-
-          const avatarHtml = (art.image && art.image.trim() !== "") 
-            ? `<img src="${art.image}" class="avatar" alt="${art.name}" onerror="this.onerror=null; this.src=''; this.outerHTML='<div class=\'avatar\'>${art.name.charAt(0)}</div>';">`
-            : `<div class="avatar">${art.name.charAt(0)}</div>`;
-
-          const card = document.createElement('div');
-          card.className = "artist-card";
-          card.innerHTML = `
-            <div class="artist-card-top">
-              <div class="artist-info">
-                ${avatarHtml}
-                <div>
-                  <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}<br>
-                  <span style="font-size:0.8rem; color:var(--text-muted)">Totale artista: ${basePts} pt</span>
-                </div>
+                <strong style="color:var(--gold); font-size:1.1rem;">${totalArtistPts} pt</strong>
               </div>
-              <strong style="color:var(--gold); font-size:1.1rem;">+${finalPts} pt</strong>
-            </div>
-            ${logsHtml}
-          `;
-          container.appendChild(card);
-        }
+            `;
+            container.appendChild(card);
+          }
+        });
       });
     }
 
     function updateDashboard() {
-      const dashTeamName = document.getElementById('dash-team-name');
-      const dashUser = document.getElementById('dash-user');
-      if (dashTeamName) dashTeamName.innerText = userState.teamName;
-      if (dashUser) dashUser.innerText = "di " + userState.username;
+      document.getElementById('dash-team-name').innerText = userState.teamName;
+      document.getElementById('dash-user').innerText = "di " + userState.username;
 
       const logoImg = document.getElementById('dash-team-logo');
       const defaultAvatar = document.getElementById('dash-default-avatar');
 
       if (userState.teamLogoUrl) {
-        if (logoImg) { logoImg.src = userState.teamLogoUrl; logoImg.style.display = 'block'; }
-        if (defaultAvatar) defaultAvatar.style.display = 'none';
+        logoImg.src = userState.teamLogoUrl; logoImg.style.display = 'block';
+        defaultAvatar.style.display = 'none';
       } else {
-        if (logoImg) logoImg.style.display = 'none';
-        if (defaultAvatar) defaultAvatar.style.display = 'flex';
+        logoImg.style.display = 'none';
+        defaultAvatar.style.display = 'flex';
       }
 
-      const totalPoints = calculatePoints(userState);
-      const dashPoints = document.getElementById('dash-points');
-      if (dashPoints) dashPoints.innerText = totalPoints;
+      if (db && userState.id) {
+        db.ref('teams/' + userState.id).once('value').then(snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            document.getElementById('dash-points').innerText = data.puntiTotale || 0;
+          }
+        });
+      }
 
       renderTeamArtistsList(userState, 'my-team-list');
-      renderLeaderboard();
     }
 
     function viewOtherTeam(teamKey, fromPage = 'leaderboard') {
@@ -822,78 +945,77 @@ function checkAndRegister() {
       const team = allTeamsCache[teamKey];
       if (!team) return;
 
-      const viewTeamName = document.getElementById('view-team-name');
-      const viewUser = document.getElementById('view-user');
-      if (viewTeamName) viewTeamName.innerText = team.teamName;
-      if (viewUser) viewUser.innerText = "di " + team.username;
+      document.getElementById('view-team-name').innerText = team.teamName;
+      document.getElementById('view-user').innerText = "di " + team.username;
 
       const logoImg = document.getElementById('view-team-logo');
       const defaultAvatar = document.getElementById('view-default-avatar');
 
       if (team.teamLogoUrl) {
-        if (logoImg) { logoImg.src = team.teamLogoUrl; logoImg.style.display = 'block'; }
-        if (defaultAvatar) defaultAvatar.style.display = 'none';
+        logoImg.src = team.teamLogoUrl; logoImg.style.display = 'block';
+        defaultAvatar.style.display = 'none';
       } else {
-        if (logoImg) logoImg.style.display = 'none';
-        if (defaultAvatar) defaultAvatar.style.display = 'flex';
+        logoImg.style.display = 'none';
+        defaultAvatar.style.display = 'flex';
       }
 
-      const totalPts = calculatePoints(team);
-      const viewPoints = document.getElementById('view-points');
-      if (viewPoints) viewPoints.innerText = totalPts;
-
+      document.getElementById('view-points').innerText = team.puntiTotale || 0;
       renderTeamArtistsList(team, 'view-team-artists');
       showPage('view-team');
     }
 
-    function goBackFromView() {
-      showPage(previousPage);
-    }
+    function goBackFromView() { showPage(previousPage); }
 
+    // RENDER CLASSIFICHE UTENTE
     function renderLeaderboard() {
-      const container = document.getElementById('leaderboard-container');
-      if (!container || !db) return;
+      const container1 = document.getElementById('classifica-serata1');
+      const container2 = document.getElementById('classifica-serata2');
+      const containerTot = document.getElementById('classifica-totale');
+      if (!db) return;
 
       db.ref('teams').on('value', snapshot => {
-        container.innerHTML = "";
         const teamsData = snapshot.val();
         allTeamsCache = teamsData || {};
-        let leaderboard = [];
+        let teamsArray = [];
 
         if (teamsData) {
           Object.keys(teamsData).forEach(key => {
             const t = teamsData[key];
-            const pts = calculatePoints(t);
-            leaderboard.push({
+            teamsArray.push({
               key: key,
-              teamName: t.teamName,
-              points: pts,
+              teamName: t.teamName || "Senza Nome",
+              username: t.username || "",
+              p1: Number(t.puntiSerata1) || 0,
+              p2: Number(t.puntiSerata2) || 0,
+              tot: Number(t.puntiTotale) || 0,
               isMe: t.teamName === userState.teamName
             });
           });
         }
 
-        leaderboard.sort((a, b) => b.points - a.points);
+        function generaHtmlLista(arrayOrdinato, campoPunti) {
+          if (arrayOrdinato.length === 0) return "<p style='color: var(--text-muted); font-size:0.85rem;'>Nessuna squadra iscritta.</p>";
+          let html = "<ul class='leaderboard-list'>";
+          arrayOrdinato.forEach((item, index) => {
+            const rank = index + 1;
+            let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
+            html += `
+              <li class="leaderboard-item ${item.isMe ? 'my-team' : ''}" onclick="viewOtherTeam('${item.key}', 'leaderboard')">
+                <div style="display:flex; align-items:center;">
+                  <div class="rank-badge ${rankClass}">${rank}</div>
+                  <div><strong>${item.teamName}</strong> <small style="color:var(--text-muted);">(${item.username})</small></div>
+                </div>
+                <strong style="color:var(--gold);">${item[campoPunti]} pt</strong>
+              </li>
+            `;
+          });
+          html += "</ul>";
+          return html;
+        }
 
-        leaderboard.forEach((t, index) => {
-          const rank = index + 1;
-          let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
-
-          const div = document.createElement('div');
-          div.className = `leaderboard-item ${t.isMe ? 'my-team' : ''}`;
-          div.onclick = () => viewOtherTeam(t.key, 'leaderboard');
-
-          div.innerHTML = `
-            <div style="display:flex; align-items:center;">
-              <div class="rank-badge ${rankClass}">${rank}</div>
-              <div>
-                <strong>${t.teamName}</strong> ${t.isMe ? ' <span style="font-size:0.75rem; color:var(--gold);">(Tua Squadra)</span>' : '<span style="font-size:0.75rem; color:var(--text-muted);"> (Clicca per ispezionare)</span>'}
-              </div>
-            </div>
-            <strong style="color:var(--gold); font-size:1.1rem;">${t.points} pt</strong>
-          `;
-          container.appendChild(div);
-        });
+        if (container1) container1.innerHTML = generaHtmlLista([...teamsArray].sort((a, b) => b.p1 - a.p1), 'p1');
+        if (container2) container2.innerHTML = generaHtmlLista([...teamsArray].sort((a, b) => b.p2 - a.p2), 'p2');
+        if (containerTot) containerTot.innerHTML = generaHtmlLista([...teamsArray].sort((a, b) => b.tot - a.tot), 'tot');
       });
     }
 
@@ -917,7 +1039,7 @@ function checkAndRegister() {
             div.innerHTML = `
               <div>
                 <strong>Squadra: ${u.teamName}</strong><br>
-                <span style="font-size:0.8rem; color:var(--text-muted);">User: <strong>${u.username}</strong> | Pass: <strong>${u.password}</strong></span>
+                <span style="font-size:0.8rem; color:var(--text-muted);">User: ${u.username} | Pass: ${u.password}</span>
               </div>
               <span style="font-size:0.75rem; color:var(--accent);">🔍 Ispeziona</span>
             `;
@@ -933,194 +1055,92 @@ function checkAndRegister() {
       const container = document.getElementById('admin-all-teams-container');
       if (!container) return;
       container.innerHTML = "";
-
       if (!allTeamsCache || Object.keys(allTeamsCache).length === 0) {
-        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">Nessuna squadra registrata al momento.</p>`;
+        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">Nessuna squadra iscritta.</p>`;
         return;
       }
 
-      Object.keys(allTeamsCache).forEach(key => {
-        const t = allTeamsCache[key];
-        const totalPts = calculatePoints(t);
+      db.ref('artisti').once('value').then(snapshotArtisti => {
+        const artistiData = snapshotArtisti.val() || {};
+        Object.keys(allTeamsCache).forEach(key => {
+          const t = allTeamsCache[key];
+          const card = document.createElement('div');
+          card.className = "card";
+          card.style.borderColor = "var(--border)";
 
-        const card = document.createElement('div');
-        card.className = "card";
-        card.style.borderColor = "var(--border)";
-
-        let artistsHtml = "";
-        if (t.selectedIds) {
-          t.selectedIds.forEach(artId => {
-            const art = ARTISTS.find(a => a.id === artId);
-            if (art) {
-              const isCap = artId === t.captainId;
-              const basePts = art.points;
-              const finalPts = isCap ? basePts * 2 : basePts;
-
-              const artistLogs = pointLogs.filter(l => l.artistId === art.id);
-              let logsList = artistLogs.length > 0 
-                ? artistLogs.map(l => `<span style="font-size:0.72rem; background:#0f172a; padding:2px 6px; border-radius:4px; border:1px solid var(--border);">${l.label} (${l.points > 0 ? '+' : ''}${l.points})</span>`).join(' ')
-                : `<span style="font-size:0.72rem; color:var(--text-muted); font-style:italic;">Nessun bonus/malus</span>`;
-
-              artistsHtml += `
-                <div style="background: #0f172a; padding: 8px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--border);">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
-                    <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO (x2)</span>' : ''}
-                    <strong style="color:var(--gold);">+${finalPts} pt</strong>
+          let artistsHtml = "";
+          if (t.selectedIds) {
+            t.selectedIds.forEach(artId => {
+              const art = ARTISTS.find(a => a.id === artId);
+              if (art) {
+                const isCap = artId === t.captainId;
+                const datiArt = artistiData[artId] || { serata1: 0, serata2: 0 };
+                let p1 = Number(datiArt.serata1) || 0;
+                let p2 = Number(datiArt.serata2) || 0;
+                if (isCap) { p1 *= 2; p2 *= 2; }
+                artistsHtml += `
+                  <div style="background: #0f172a; padding: 8px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between;">
+                      <strong>${art.name}</strong> ${isCap ? '<span class="captain-badge">CAPITANO</span>' : ''}
+                      <strong style="color:var(--gold);">${p1 + p2} pt</strong>
+                    </div>
                   </div>
-                  <div style="display:flex; flex-wrap:wrap; gap:4px;">${logsList}</div>
-                </div>
-              `;
-            }
-          });
-        }
+                `;
+              }
+            });
+          }
 
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
-            <div>
-              <h4 style="color:var(--gold);">${t.teamName}</h4>
-              <span style="font-size:0.8rem; color:var(--text-muted);">di ${t.username}</span>
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <div><h4 style="color:var(--gold);">${t.teamName}</h4><span style="font-size:0.8rem; color:var(--text-muted);">di ${t.username}</span></div>
+              <strong style="color:var(--gold);">${t.puntiTotale || 0} pt</strong>
             </div>
-            <strong style="font-size:1.2rem; color:var(--gold);">${totalPts} pt</strong>
-          </div>
-          <div>${artistsHtml}</div>
-        `;
-        container.appendChild(card);
+            <div>${artistsHtml}</div>
+          `;
+          container.appendChild(card);
+        });
       });
     }
 
     function renderAdminLeaderboard() {
       const container = document.getElementById('admin-leaderboard-container');
       if (!container) return;
-      container.innerHTML = "";
-
-      let leaderboard = [];
-      Object.keys(allTeamsCache).forEach(key => {
-        const t = allTeamsCache[key];
-        const pts = calculatePoints(t);
-        leaderboard.push({ key: key, teamName: t.teamName, points: pts });
-      });
-
-      leaderboard.sort((a, b) => b.points - a.points);
-
-      if (leaderboard.length === 0) {
-        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">Nessuna squadra in classifica.</p>`;
-        return;
-      }
-
-      leaderboard.forEach((t, index) => {
-        const rank = index + 1;
-        let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
-
-        const div = document.createElement('div');
-        div.className = "leaderboard-item";
-        div.onclick = () => viewOtherTeam(t.key, 'admin');
-
-        div.innerHTML = `
-          <div style="display:flex; align-items:center;">
-            <div class="rank-badge ${rankClass}">${rank}</div>
-            <div><strong>${t.teamName}</strong></div>
-          </div>
-          <strong style="color:var(--gold); font-size:1.1rem;">${t.points} pt</strong>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    if (db) {
-      db.ref('artists').on('value', snapshot => {
+      db.ref('teams').once('value').then(snapshot => {
+        container.innerHTML = "";
         const data = snapshot.val();
+        let leaderboard = [];
         if (data) {
-          ARTISTS.forEach(art => {
-            if (data[art.id] !== undefined) art.points = data[art.id].points || 0;
+          Object.keys(data).forEach(key => {
+            leaderboard.push({ key: key, teamName: data[key].teamName, points: data[key].puntiTotale || 0 });
           });
-          updateDashboard();
-          renderAdminBoxes();
         }
+        leaderboard.sort((a, b) => b.points - a.points);
+        if (leaderboard.length === 0) { container.innerHTML = "<p style='color:var(--text-muted);'>Nessuna squadra.</p>"; return; }
+
+        let html = "<ul class='leaderboard-list'>";
+        leaderboard.forEach((t, index) => {
+          html += `
+            <li class="leaderboard-item" onclick="viewOtherTeam('${t.key}', 'admin')">
+              <div style="display:flex; align-items:center;">
+                <div class="rank-badge">${index + 1}</div>
+                <div><strong>${t.teamName}</strong></div>
+              </div>
+              <strong style="color:var(--gold);">${t.points} pt</strong>
+            </li>
+          `;
+        });
+        html += "</ul>";
+        container.innerHTML = html;
       });
-
-      db.ref('pointLogs').on('value', snapshot => {
-        const data = snapshot.val();
-        pointLogs = data ? Object.values(data) : [];
-        updateDashboard();
-        renderAdminBoxes();
-      });
-    }
-
-    function populateAdminSelect() {
-      const sel = document.getElementById('admin-artist-select');
-      if (!sel) return;
-      sel.innerHTML = "";
-      let sortedArtists = [...ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
-      sortedArtists.forEach(art => {
-        sel.innerHTML += `<option value="${art.id}">${art.name}</option>`;
-      });
-      renderAdminBoxes();
-    }
-
-    function applyAdminPoints() {
-      const artId = parseInt(document.getElementById('admin-artist-select').value);
-      const selectEl = document.getElementById('admin-points-select');
-      const pts = parseInt(selectEl.value);
-      const label = selectEl.options[selectEl.selectedIndex].text;
-      
-      const alreadyAssigned = pointLogs.some(log => log.artistId === artId && log.label === label);
-      if (alreadyAssigned) {
-        return alert(`⚠️ Questo bonus/malus ("${label}") è già stato assegnato a questo artista! Non può essere assegnato due volte.`);
-      }
-
-      const art = ARTISTS.find(a => a.id === artId);
-      const newPoints = art.points + pts;
-
-      if (db) {
-        db.ref('artists/' + artId).set({ points: newPoints });
-        const logId = Date.now();
-        db.ref('pointLogs/' + logId).set({ id: logId, artistId: artId, artistName: art.name, points: pts, label: label });
-      }
-      alert("Punti assegnati con successo!");
-    }
-
-    function removeAdminPoint(logId) {
-      const log = pointLogs.find(l => l.id === logId);
-      if (log && db) {
-        const art = ARTISTS.find(a => a.id === log.artistId);
-        const newPoints = art.points - log.points;
-        db.ref('artists/' + log.artistId).set({ points: newPoints });
-        db.ref('pointLogs/' + logId).remove();
-      }
     }
 
     function resetAllData() {
-      if (confirm("Attenzione: vuoi davvero cancellare tutte le squadre e azzerare i punti?") && db) {
-        db.ref('artists').remove();
+      if (confirm("Vuoi davvero azzerare tutto?") && db) {
+        db.ref('artisti').remove();
         db.ref('pointLogs').remove();
         db.ref('teams').remove();
         alert("Database azzerato!");
       }
-    }
-
-    function renderAdminBoxes() {
-      const container = document.getElementById('admin-artist-boxes');
-      if (!container) return;
-      container.innerHTML = "";
-      let sortedArtists = [...ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
-
-      sortedArtists.forEach(art => {
-        const artLogs = pointLogs.filter(l => l.artistId === art.id);
-        const box = document.createElement('div');
-        box.className = "admin-artist-box";
-        let logsHtml = (artLogs.length === 0) 
-          ? `<div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nessun bonus/malus</div>`
-          : artLogs.map(log => `<div class="admin-log-entry"><span>${log.label}</span><button class="btn-danger-icon" onclick="removeAdminPoint(${log.id})">❌</button></div>`).join('');
-
-        box.innerHTML = `
-          <div class="admin-artist-header">
-            <strong>${art.name}</strong>
-            <span style="font-size:1.1rem; font-weight:bold; color:var(--gold);">${art.points > 0 ? '+' : ''}${art.points} pt</span>
-          </div>
-          <div>${logsHtml}</div>
-        `;
-        container.appendChild(box);
-      });
     }
 
     function showPage(pageId, navEl) {
@@ -1134,41 +1154,26 @@ function checkAndRegister() {
       }
 
       if (pageId === 'leaderboard') renderLeaderboard();
-      if (pageId === 'admin') {
-        renderAdminBoxes();
-        loadAdminData();
-      }
+      if (pageId === 'admin') { loadAdminData(); populateAdminSelect(); }
     }
-function avviaCountdown() {
-      // Data e ora di scadenza: Sabato 14 novembre 2026 alle ore 21:00:00
+
+    window.addEventListener('DOMContentLoaded', () => {
+      showPage('auth');
+      renderLeaderboard();
+      
       const dataScadenza = new Date("2026-11-14T21:00:00").getTime();
-
-      const timerInterval = setInterval(function() {
-        const oraAttuale = new Date().getTime();
-        const distanza = dataScadenza - oraAttuale;
-
-        const elementoTimer = document.getElementById('countdown-timer');
-        if (!elementoTimer) return;
-
-        if (distanza < 0) {
-          clearInterval(timerInterval);
-          elementoTimer.innerText = "🛑 ISCRIZIONI CHIUSE";
-          return;
-        }
-
-        // Calcolo giorni, ore, minuti e secondi
-        const giorni = Math.floor(distanza / (1000 * 60 * 60 * 24));
-        const ore = Math.floor((distanza % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minuti = Math.floor((distanza % (1000 * 60 * 60)) / (1000 * 60));
-        const secondi = Math.floor((distanza % (1000 * 60)) / 1000);
-
-        // Mostra il risultato formattato
-        elementoTimer.innerText = `${giorni}g ${ore}h ${minuti}m ${secondi}s`;
+      setInterval(() => {
+        const distanza = dataScadenza - new Date().getTime();
+        const el = document.getElementById('countdown-timer');
+        if (!el) return;
+        if (distanza < 0) { el.innerText = "🛑 ISCRIZIONI CHIUSE"; return; }
+        const g = Math.floor(distanza / (1000 * 60 * 60 * 24));
+        const o = Math.floor((distanza % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distanza % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distanza % (1000 * 60)) / 1000);
+        el.innerText = `${g}g ${o}h ${m}m ${s}s`;
       }, 1000);
-    }
-
-    // Avvia il countdown appena la pagina è pronta
-    window.addEventListener('DOMContentLoaded', avviaCountdown);
+    });
   </script>
 </body>
 </html>
