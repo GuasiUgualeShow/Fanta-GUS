@@ -116,7 +116,7 @@
         🎉 <strong>Partecipa anche tu al Fanta GUS. Crea la tua squadra!</strong> La moneta ufficiale sono i <em>"Gastoni"</em>.<br><br>
         <ul style="margin-left: 0px; line-height: 1.5;">
           <br>📋 <strong>Regolamento</strong><br>
-          <br>È obbligatorio creare una squadra di 5 artisti e nominare Capitano un artista, al quale sarà assegnato il doppio del punteggio guadagnato. Hai a disposizione un massimo di 100 Gastoni, devi riuscire a comporre la squadra con i Gastoni a disposizione</br>
+          <br>È obbligatorio creare una squadra di 5 artisti e nominare Capitano un artista, al quale sarà assegnato il doppio del punteggio guadagnato. Hai a disposizione un massimo di 110 Gastoni, devi riuscire a comporre la squadra con i Gastoni a disposizione</br>
           <br>È possibile iscrivere la propria squadra entro sabato 14 novembre 2026 alle ore 21.00</br>
           <br>I bonus e i malus per ogni artista verranno attribuiti dall’organizzazione in modo insindacabile</br><br>
 
@@ -192,11 +192,11 @@
     <!-- SCHERMATA SQUADRA (MERCATO) -->
     <div id="page-squad" class="page">
       <div class="alert-banner" style="background: rgba(245, 158, 11, 0.15); border-color: var(--gold); color: var(--gold);">
-        ⚠️ Seleziona <strong>5 artisti</strong> senza superare il budget di <strong>100 Gastoni</strong>! Una volta salvata, la squadra non potrà più essere modificata.
+        ⚠️ Seleziona <strong>5 artisti</strong> senza superare il budget di <strong>110 Gastoni</strong>! Una volta salvata, la squadra non potrà più essere modificata.
       </div>
 
       <div class="budget-bar">
-        <span>Gastoni Rimanenti: <strong id="budget-left" style="color:var(--gold)">100</strong> / 100</span>
+        <span>Gastoni Rimanenti: <strong id="budget-left" style="color:var(--gold)">110</strong> / 110</span>
         <span>Selezionati: <strong id="selected-count">0</strong>/5</span>
       </div>
 
@@ -438,20 +438,20 @@
     }
 
     const ARTISTS = [
-      { id: 1, name: "Lorenzo Giuliani", cost: 25, image: "https://drive.google.com/thumbnail?id=17YenmIcxkfeYyH856NN1mHCaszUw-rzJ&sz=w1000" },
-      { id: 2, name: "Pietro Viconi", cost: 23, image: "https://drive.google.com/thumbnail?id=1Coi60YZuCvVAJ56YADcDIMNVRgMhG5V7&sz=w1000" },
-      { id: 3, name: "Marco De Francesco", cost: 22, image: "https://drive.google.com/thumbnail?id=1oA9Rzcee5VyFJtVWTl3X_utIQsxgAz0y&sz=w1000" },
-      { id: 4, name: "Gianluca Greganti", cost: 20, image: "https://drive.google.com/thumbnail?id=1R_W64bCLEakpCOvngKaN_OtXnRqYOSB-&sz=w1000" },
-      { id: 5, name: "Alessia Bosi", cost: 19, image: "https://drive.google.com/thumbnail?id=1e3K4k0qdgV2s_sJsUWjqP8CG0G21JdZP&sz=w1000" },
-      { id: 6, name: "Alice Ceccarelli", cost: 18, image: "https://drive.google.com/thumbnail?id=1sr2U37HUO8UKqfv5TEyO--pV_1Y66qih&sz=w1000" },
-      { id: 7, name: "Francesco Bontempo", cost: 17, image: "https://drive.google.com/thumbnail?id=1QTz3Hi0FKQi4ZYFp6JUVoTHGSuSymlmg&sz=w1000" },
-      { id: 8, name: "Le GEC", cost: 16, image: "https://drive.google.com/thumbnail?id=1khYyUe9uqC5mGsWR0dQ3hPtn3wV-y6Q5&sz=w1000" },
-      { id: 9, name: "Gli MMMC", cost: 15, image: "https://drive.google.com/thumbnail?id=1W3GSXRBI7blsAWRr9ydg37KA456rT0kk&sz=w1000" },
-      { id: 10, name: "Marco Ulissi", cost: 14, image: "https://drive.google.com/thumbnail?id=1m4ig-8SLTn-YQfC9WBPaq226dd6WG8nU&sz=w1000" },
-      { id: 11, name: "Francesco Giorgini", cost: 13, image: "https://drive.google.com/thumbnail?id=15qMNuc2qy-2GD9V-kEVnko-E7gxryxn3&sz=w1000" },
-      { id: 12, name: "Maurizio Ceccarelli", cost: 12, image: "https://drive.google.com/thumbnail?id=1el4X-gFeFKZbaXqj9vVIovkQrysN5Qiy&sz=w1000" },
-      { id: 13, name: "D&G Damiano e Gabriele", cost: 11, image: "https://drive.google.com/thumbnail?id=1O19V3H9ypyHhUV92GvPOkjHlwGloR1xK&sz=w1000" },
-      { id: 14, name: "Stefano Battistini", cost: 10, image: "https://drive.google.com/thumbnail?id=1Raq15MC8wCiQthCzvxYf7ljx6_MYArrS&sz=w1000" }
+      { id: 1, name: "Lorenzo Giuliani", cost: 30, image: "https://drive.google.com/thumbnail?id=17YenmIcxkfeYyH856NN1mHCaszUw-rzJ&sz=w1000" },
+      { id: 2, name: "Pietro Viconi", cost: 30, image: "https://drive.google.com/thumbnail?id=1Coi60YZuCvVAJ56YADcDIMNVRgMhG5V7&sz=w1000" },
+      { id: 3, name: "Marco De Francesco", cost: 25, image: "https://drive.google.com/thumbnail?id=1oA9Rzcee5VyFJtVWTl3X_utIQsxgAz0y&sz=w1000" },
+      { id: 4, name: "Gianluca Greganti", cost: 25, image: "https://drive.google.com/thumbnail?id=1R_W64bCLEakpCOvngKaN_OtXnRqYOSB-&sz=w1000" },
+      { id: 5, name: "Alessia Bosi", cost: 30, image: "https://drive.google.com/thumbnail?id=1e3K4k0qdgV2s_sJsUWjqP8CG0G21JdZP&sz=w1000" },
+      { id: 6, name: "Alice Ceccarelli", cost: 20, image: "https://drive.google.com/thumbnail?id=1sr2U37HUO8UKqfv5TEyO--pV_1Y66qih&sz=w1000" },
+      { id: 7, name: "Francesco Bontempo", cost: 25, image: "https://drive.google.com/thumbnail?id=1QTz3Hi0FKQi4ZYFp6JUVoTHGSuSymlmg&sz=w1000" },
+      { id: 8, name: "Le GEC - Gaia, Elsa, Cecilia", cost: 15, image: "https://drive.google.com/thumbnail?id=1khYyUe9uqC5mGsWR0dQ3hPtn3wV-y6Q5&sz=w1000" },
+      { id: 9, name: "MMMC - Marina, Marco, Mirco e Cristina", cost: 20, image: "https://drive.google.com/thumbnail?id=1W3GSXRBI7blsAWRr9ydg37KA456rT0kk&sz=w1000" },
+      { id: 10, name: "Marco Ulissi", cost: 20, image: "https://drive.google.com/thumbnail?id=1m4ig-8SLTn-YQfC9WBPaq226dd6WG8nU&sz=w1000" },
+      { id: 11, name: "Francesco Giorgini", cost: 15, image: "https://drive.google.com/thumbnail?id=15qMNuc2qy-2GD9V-kEVnko-E7gxryxn3&sz=w1000" },
+      { id: 12, name: "Maurizio Ceccarelli", cost: 15, image: "https://drive.google.com/thumbnail?id=1el4X-gFeFKZbaXqj9vVIovkQrysN5Qiy&sz=w1000" },
+      { id: 13, name: "Damiano e Gabriele", cost: 15, image: "https://drive.google.com/thumbnail?id=1O19V3H9ypyHhUV92GvPOkjHlwGloR1xK&sz=w1000" },
+      { id: 14, name: "Stefano Battistini", cost: 25, image: "https://drive.google.com/thumbnail?id=1Raq15MC8wCiQthCzvxYf7ljx6_MYArrS&sz=w1000" }
     ];
 
     let userState = { id: null, username: "", password: "", teamName: "", teamLogoUrl: null, selectedIds: [], captainId: null };
@@ -695,7 +695,7 @@
         if (userState.selectedIds.length >= 5) return alert("Massimo 5 artisti!");
         const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
         const artCost = ARTISTS.find(a => a.id === id).cost;
-        if (currentCost + artCost > 100) return alert("Supereresti i 100 Gastoni!");
+        if (currentCost + artCost > 110) return alert("Supereresti i 110 Gastoni!");
         userState.selectedIds.push(id);
       }
       renderArtistMarket();
@@ -705,7 +705,7 @@
       const currentCost = userState.selectedIds.reduce((sum, aId) => sum + ARTISTS.find(a => a.id === aId).cost, 0);
       const budgetLeft = document.getElementById('budget-left');
       const selectedCount = document.getElementById('selected-count');
-      if (budgetLeft) budgetLeft.innerText = 100 - currentCost;
+      if (budgetLeft) budgetLeft.innerText = 110 - currentCost;
       if (selectedCount) selectedCount.innerText = userState.selectedIds.length;
     }
 
@@ -815,7 +815,6 @@
         label: label,
         serata: serataAttivaAdmin
       }).then(() => {
-        alert("Bonus/Malus assegnato con successo!");
         ricalcolaEAggiornaTutto();
       });
     }
