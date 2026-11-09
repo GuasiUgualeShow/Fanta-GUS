@@ -62,6 +62,7 @@
     .artist-info { display: flex; align-items: center; gap: 12px; }
     
     .avatar { width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: bold; object-fit: cover; border: 2px solid var(--border); }
+    .leaderboard-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--border); margin-right: 10px; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
     .team-header-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; display: block; border: 3px solid var(--accent); }
     .badge-cost { background: #334155; color: var(--gold); padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
 
@@ -137,7 +138,8 @@
           🤸 Cade o inciampa sulla scala <strong style="color:var(--danger);">-15 pt</strong><br>
           🍌 Scivola sul palco <strong style="color:var(--danger);">-10 pt</strong><br>
           🎙️ Non funziona il microfono <strong style="color:var(--danger);">-5 pt</strong><br>
-          👀 Il presentatore sbaglia il nome dell'artista o della canzone <strong style="color:var(--danger);">-10 pt</strong>
+          👀 Il presentatore sbaglia il nome dell'artista o della canzone <strong style="color:var(--danger);">-10 pt</strong><br>
+          🤐 Nomina il FANTAGUS sul palco <strong style="color:var(--danger);">-10 pt</strong>
         </ul>
       </div>
       <div class="card" id="box-register">
@@ -227,6 +229,7 @@
           <li><span>🍌 Scivola sul palco</span><strong style="color:var(--danger);">-10 pt</strong></li>
           <li><span>🎙️ Non funziona il microfono</span><strong style="color:var(--danger);">-5 pt</strong></li>
           <li><span>👀 Il presentatore sbaglia il nome dell'artista o della canzone</span><strong style="color:var(--danger);">-10 pt</strong></li>
+          <li><span>🤐 Nomina il FANTAGUS sul palco <strong style="color:var(--danger);">-10 pt</strong></li>
         </ul>
       </div>
 
@@ -269,6 +272,7 @@
           <li><span>🍌 Scivola sul palco</span><strong style="color:var(--danger);">-10 pt</strong></li>
           <li><span>🎙️ Non funziona il microfono</span><strong style="color:var(--danger);">-5 pt</strong></li>
           <li><span>👀 Il presentatore sbaglia il nome dell'artista o della canzone</span><strong style="color:var(--danger);">-10 pt</strong></li>
+          <li><span>🤐 Nomina il FANTAGUS sul palco <strong style="color:var(--danger);">-10 pt</strong></li>
         </ul>
       </div>
 
@@ -379,6 +383,7 @@
               <option value="-10">🍌 Scivola sul palco (-10)</option>
               <option value="-5">🎙️ Non funziona il microfono (-5)</option>
               <option value="-10">👀 Il presentatore sbaglia il nome dell'artista o della canzone (-10)</option>
+              <option value="-10">🤐 Nomina il FANTAGUS sul palco (-10)</option>
             </select>
           </div>
           <button class="btn" onclick="applyAdminPoints()">Conferma e Assegna Bonus</button>
@@ -1068,7 +1073,7 @@
 
     function goBackFromView() { showPage(previousPage); }
 
-    // RENDER CLASSIFICHE UTENTE (SABATO E DOMENICA)
+    // RENDER CLASSIFICHE UTENTE (SABATO E DOMENICA) CON LOGO SQUADRA
     function renderLeaderboard() {
       const container1 = document.getElementById('classifica-serata1');
       const container2 = document.getElementById('classifica-serata2');
@@ -1086,6 +1091,7 @@
               key: key,
               teamName: t.teamName || "Senza Nome",
               username: t.username || "",
+              teamLogoUrl: t.teamLogoUrl || null,
               p1: Number(t.puntiSerata1) || 0,
               p2: Number(t.puntiSerata2) || 0,
               isMe: t.teamName === userState.teamName
@@ -1099,11 +1105,18 @@
           arrayOrdinato.forEach((item, index) => {
             const rank = index + 1;
             let rankClass = (rank === 1) ? "rank-1" : (rank === 2) ? "rank-2" : (rank === 3) ? "rank-3" : "";
+            
+            // Gestione dell'immagine della squadra nella classifica
+            let logoHtml = item.teamLogoUrl 
+              ? `<img src="${item.teamLogoUrl}" class="leaderboard-avatar" alt="Logo">`
+              : `<div class="leaderboard-avatar">${item.teamName.charAt(0).toUpperCase()}</div>`;
+
             html += `
               <li class="leaderboard-item ${item.isMe ? 'my-team' : ''}" onclick="viewOtherTeam('${item.key}', 'leaderboard')">
                 <div style="display:flex; align-items:center;">
                   <div class="rank-badge ${rankClass}">${rank}</div>
-                  <div><strong>${item.teamName}</strong> <small style="color:var(--text-muted);">(${item.username})</small></div>
+                  ${logoHtml}
+                  <div><strong>${item.teamName}</strong> <small style="color:var(--text-muted); display:block;">(${item.username})</small></div>
                 </div>
                 <strong style="color:var(--gold);">${item[campoPunti]} pt</strong>
               </li>
@@ -1135,10 +1148,18 @@
             const div = document.createElement('div');
             div.className = "admin-user-row";
             div.onclick = () => viewOtherTeam(key, 'admin');
+            
+            let logoHtml = u.teamLogoUrl 
+              ? `<img src="${u.teamLogoUrl}" class="leaderboard-avatar" alt="Logo">`
+              : `<div class="leaderboard-avatar">${u.teamName.charAt(0).toUpperCase()}</div>`;
+
             div.innerHTML = `
-              <div>
-                <strong>Squadra: ${u.teamName}</strong><br>
-                <span style="font-size:0.8rem; color:var(--text-muted);">User: ${u.username} | Pass: ${u.password}</span>
+              <div style="display:flex; align-items:center;">
+                ${logoHtml}
+                <div>
+                  <strong>Squadra: ${u.teamName}</strong><br>
+                  <span style="font-size:0.8rem; color:var(--text-muted);">User: ${u.username} | Pass: ${u.password}</span>
+                </div>
               </div>
               <span style="font-size:0.75rem; color:var(--accent);">🔍 Ispeziona</span>
             `;
@@ -1189,9 +1210,16 @@
             });
           }
 
+          let logoHtml = t.teamLogoUrl 
+            ? `<img src="${t.teamLogoUrl}" class="leaderboard-avatar" alt="Logo">`
+            : `<div class="leaderboard-avatar">${t.teamName.charAt(0).toUpperCase()}</div>`;
+
           card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
-              <div><h4 style="color:var(--gold);">${t.teamName}</h4><span style="font-size:0.8rem; color:var(--text-muted);">di ${t.username}</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <div style="display:flex; align-items:center;">
+                ${logoHtml}
+                <div><h4 style="color:var(--gold);">${t.teamName}</h4><span style="font-size:0.8rem; color:var(--text-muted);">di ${t.username}</span></div>
+              </div>
               <strong style="color:var(--gold);">${(Number(t.puntiSerata1) || 0) + (Number(t.puntiSerata2) || 0)} pt</strong>
             </div>
             <div>${artistsHtml}</div>
@@ -1201,7 +1229,7 @@
       });
     }
 
-    // RENDER CLASSIFICHE ADMIN (SABATO E DOMENICA SEPARATE)
+    // RENDER CLASSIFICHE ADMIN (SABATO E DOMENICA SEPARATE) CON LOGO
     function renderAdminLeaderboard() {
       const containerS1 = document.getElementById('admin-classifica-serata1');
       const containerS2 = document.getElementById('admin-classifica-serata2');
@@ -1215,6 +1243,7 @@
           teamsArray.push({
             key: key,
             teamName: data[key].teamName || "Senza Nome",
+            teamLogoUrl: data[key].teamLogoUrl || null,
             p1: Number(data[key].puntiSerata1) || 0,
             p2: Number(data[key].puntiSerata2) || 0
           });
@@ -1224,10 +1253,15 @@
           if (arrayOrd.length === 0) return "<p style='color:var(--text-muted); font-size:0.85rem;'>Nessuna squadra.</p>";
           let html = "<ul class='leaderboard-list'>";
           arrayOrd.forEach((t, index) => {
+            let logoHtml = t.teamLogoUrl 
+              ? `<img src="${t.teamLogoUrl}" class="leaderboard-avatar" alt="Logo">`
+              : `<div class="leaderboard-avatar">${t.teamName.charAt(0).toUpperCase()}</div>`;
+
             html += `
               <li class="leaderboard-item" onclick="viewOtherTeam('${t.key}', 'admin')">
                 <div style="display:flex; align-items:center;">
                   <div class="rank-badge">${index + 1}</div>
+                  ${logoHtml}
                   <div><strong>${t.teamName}</strong></div>
                 </div>
                 <strong style="color:var(--gold);">${t[campo]} pt</strong>
